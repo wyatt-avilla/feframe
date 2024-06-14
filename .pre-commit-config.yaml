@@ -12,6 +12,7 @@ repos:
         entry: cargo test
         language: rust
         types: [rust]
+        pass_filenames: false
     -   id: cargo-fmt
         name: cargo fmt
         entry: cargo fmt -- --check

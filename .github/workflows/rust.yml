@@ -22,6 +22,7 @@ jobs:
       env:
         LASTFM_USERNAME: ${{secrets.LASTFM_USERNAME}}
         LASTFM_KEY: ${{secrets.LASTFM_KEY}}
+        GH_USERNAME: ${{secrets.GH_USERNAME}}
       run: cargo test --verbose
     - name: Run Clippy
       run: cargo clippy --all-targets --all-features -- -D warnings

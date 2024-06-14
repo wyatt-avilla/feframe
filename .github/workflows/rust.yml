@@ -23,3 +23,7 @@ jobs:
         LASTFM_USERNAME: ${{secrets.LASTFM_USERNAME}}
         LASTFM_KEY: ${{secrets.LASTFM_KEY}}
       run: cargo test --verbose
+    - name: Run Clippy
+      run: cargo clippy --all-targets --all-features -- -D warnings
+    - name: Check formatting
+      run: cargo fmt -- --check

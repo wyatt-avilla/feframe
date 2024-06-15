@@ -26,6 +26,6 @@ jobs:
         GOODREADS_SHELF: ${{secrets.GOODREADS_SHELF}}
       run: cargo test --verbose
     - name: Run Clippy
-      run: cargo clippy --all-targets --all-features -- -D warnings
+      run: cargo clippy --all-targets --all-features -- -D warnings -W clippy::pedantic
     - name: Check formatting
       run: cargo fmt -- --check

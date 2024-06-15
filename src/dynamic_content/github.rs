@@ -13,7 +13,7 @@ pub async fn get_recent_commits(
 ) -> Result<std::vec::Vec<Commit>, Box<dyn std::error::Error>> {
     let username = std::env::var("GH_USERNAME")?;
 
-    let url = format!("https://api.github.com/users/{}/events", username);
+    let url = format!("https://api.github.com/users/{username}/events");
 
     let client = reqwest::Client::new();
     let response = client
@@ -28,7 +28,7 @@ pub async fn get_recent_commits(
         .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?;
 
     let events = match json.as_array() {
-        Some(events) => events.to_vec(),
+        Some(events) => events.clone(),
         None => return Ok(Vec::new()),
     };
 

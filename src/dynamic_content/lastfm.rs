@@ -14,7 +14,7 @@ pub async fn get_recently_listened(
     let key = std::env::var("LASTFM_KEY")?;
     let username = std::env::var("LASTFM_USERNAME")?;
 
-    let url = format!("https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={}&api_key={}&format=json", username, key);
+    let url = format!("https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={username}&api_key={key}&format=json");
 
     let response = reqwest::get(&url)
         .await
@@ -27,7 +27,7 @@ pub async fn get_recently_listened(
         .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?;
 
     let tracks = match json["recenttracks"]["track"].as_array() {
-        Some(tracks) => tracks.to_vec(),
+        Some(tracks) => tracks.clone(),
         None => return Ok(Vec::new()),
     };
 

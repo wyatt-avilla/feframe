@@ -20,33 +20,33 @@ async fn fetch_shelf_html(url: String) -> Result<Html, Box<dyn std::error::Error
     Ok(Html::parse_document(&response))
 }
 
-fn clean_text(input: String) -> String {
+fn clean_text(input: &str) -> String {
     let trimmed = input.trim().replace(['\n', '\r'], "");
     let re = Regex::new(r"\s{2,}").unwrap();
     re.replace_all(&trimmed, " ").to_string()
 }
 
 fn create_goodreads_url(path: &str) -> Result<Url, ParseError> {
-    Url::parse(&format!("https://www.goodreads.com/{}", path))
+    Url::parse(&format!("https://www.goodreads.com/{path}"))
 }
 
-fn swap_name_order(full_name: String) -> Result<String, String> {
+fn swap_name_order(full_name: &str) -> Result<String, String> {
     let (last, first) = full_name
         .split_once(',')
         .ok_or("No comma in author name")
         .map(|(before, after)| (before.trim(), after.trim()))?;
 
-    Ok(format!("{} {}", first, last))
+    Ok(format!("{first} {last}"))
 }
 
 pub async fn get_recently_read(n: u32) -> Result<std::vec::Vec<Book>, Box<dyn std::error::Error>> {
     let shelf = std::env::var("GOODREADS_SHELF")?;
     let html = fetch_shelf_html(shelf).await?;
 
-    let row_selector = Selector::parse(r#"tr.bookalike.review"#).unwrap();
+    let row_selector = Selector::parse(r"tr.bookalike.review").unwrap();
 
-    let title_selector = Selector::parse(r#"td.field.title a"#).unwrap();
-    let author_selector = Selector::parse(r#"td.field.author a"#).unwrap();
+    let title_selector = Selector::parse(r"td.field.title a").unwrap();
+    let author_selector = Selector::parse(r"td.field.author a").unwrap();
 
     Ok(html
         .select(&row_selector)
@@ -58,8 +58,9 @@ pub async fn get_recently_read(n: u32) -> Result<std::vec::Vec<Book>, Box<dyn st
             let author_href = author_element.value().attr("href")?;
 
             Some(Book {
-                title: clean_text(title_element.text().collect::<Vec<_>>().concat()),
-                author: swap_name_order(author_element.text().collect::<Vec<_>>().concat()).ok()?,
+                title: clean_text(&title_element.text().collect::<Vec<_>>().concat()),
+                author: swap_name_order(&author_element.text().collect::<Vec<_>>().concat())
+                    .ok()?,
                 title_url: create_goodreads_url(title_href).ok()?,
                 author_url: create_goodreads_url(author_href).ok()?,
             })

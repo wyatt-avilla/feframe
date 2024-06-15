@@ -23,7 +23,7 @@ async fn main() {
                 );
             }
         }
-        Err(e) => eprintln!("function failed with: {}", e),
+        Err(e) => eprintln!("function failed with: {e}"),
     };
 
     match get_recent_commits(5).await {
@@ -34,7 +34,7 @@ async fn main() {
                 println!("{}", commit.repository_link);
             }
         }
-        Err(e) => eprintln!("function failed with: {}", e),
+        Err(e) => eprintln!("function failed with: {e}"),
     }
 
     match get_recently_read(5).await {
@@ -43,6 +43,6 @@ async fn main() {
                 println!("{} by {}", book.title, book.author);
             }
         }
-        Err(e) => eprintln!("function failed with: {}", e),
+        Err(e) => eprintln!("function failed with: {e}"),
     }
 }

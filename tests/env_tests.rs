@@ -12,9 +12,10 @@ mod env_tests {
         required_vars
             .iter()
             .map(|&var_name| {
-                if std::env::var(var_name).is_err() {
-                    panic!("Environment variable {} is not defined", var_name);
-                }
+                assert!(
+                    std::env::var(var_name).is_ok(),
+                    "Environment variable {var_name} is not defined"
+                );
             })
             .for_each(drop);
     }

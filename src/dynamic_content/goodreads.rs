@@ -40,9 +40,8 @@ fn swap_name_order(full_name: String) -> Result<String, String> {
 }
 
 pub async fn get_recently_read(n: u32) -> Result<std::vec::Vec<Book>, Box<dyn std::error::Error>> {
-    let html =
-        fetch_shelf_html("https://www.goodreads.com/review/list/159014522?shelf=read".to_string())
-            .await?;
+    let shelf = std::env::var("GOODREADS_SHELF")?;
+    let html = fetch_shelf_html(shelf).await?;
 
     let row_selector = Selector::parse(r#"tr.bookalike.review"#).unwrap();
 

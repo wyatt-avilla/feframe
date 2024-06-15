@@ -2,7 +2,12 @@ mod env_tests {
     #[test]
     fn test_required_env_vrs() {
         dotenv::dotenv().ok();
-        let required_vars = ["LASTFM_USERNAME", "LASTFM_KEY", "GH_USERNAME"];
+        let required_vars = [
+            "LASTFM_USERNAME",
+            "LASTFM_KEY",
+            "GH_USERNAME",
+            "GOODREADS_SHELF",
+        ];
 
         required_vars
             .iter()

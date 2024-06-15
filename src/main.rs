@@ -1,9 +1,11 @@
 mod dynamic_content {
     pub mod github;
+    pub mod goodreads;
     pub mod lastfm;
 }
 
 use dynamic_content::github::get_recent_commits;
+use dynamic_content::goodreads::get_recently_read;
 use dynamic_content::lastfm::get_recently_listened;
 
 #[tokio::main]
@@ -30,6 +32,15 @@ async fn main() {
                 println!("{} in {}", commit.message, commit.repository_name);
                 println!("{}", commit.url);
                 println!("{}", commit.repository_link);
+            }
+        }
+        Err(e) => eprintln!("function failed with: {}", e),
+    }
+
+    match get_recently_read(5).await {
+        Ok(bookvec) => {
+            for book in bookvec {
+                println!("{} by {}", book.title, book.author);
             }
         }
         Err(e) => eprintln!("function failed with: {}", e),

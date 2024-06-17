@@ -7,6 +7,7 @@ mod env_tests {
             "LASTFM_KEY",
             "GH_USERNAME",
             "GOODREADS_SHELF",
+            "LETTERBOXD_USERNAME",
         ];
 
         required_vars

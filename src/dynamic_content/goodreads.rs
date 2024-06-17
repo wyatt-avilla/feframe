@@ -9,17 +9,6 @@ pub struct Book {
     pub author_url: Url,
 }
 
-async fn fetch_shelf_html(url: String) -> Result<Html, Box<dyn std::error::Error>> {
-    let response = reqwest::get(&url)
-        .await
-        .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?
-        .text()
-        .await
-        .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?;
-
-    Ok(Html::parse_document(&response))
-}
-
 fn clean_text(input: &str) -> String {
     let trimmed = input.trim().replace(['\n', '\r'], "");
     let re = Regex::new(r"\s{2,}").unwrap();
@@ -41,7 +30,14 @@ fn swap_name_order(full_name: &str) -> Result<String, String> {
 
 pub async fn get_recently_read(n: u32) -> Result<std::vec::Vec<Book>, Box<dyn std::error::Error>> {
     let shelf = std::env::var("GOODREADS_SHELF")?;
-    let html = fetch_shelf_html(shelf).await?;
+    let html = Html::parse_document(
+        &reqwest::get(&shelf)
+            .await
+            .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?
+            .text()
+            .await
+            .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?,
+    );
 
     let row_selector = Selector::parse(r"tr.bookalike.review").unwrap();
 

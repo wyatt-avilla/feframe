@@ -1,8 +1,10 @@
-use super::cache::ApiRefresh;
+use super::ApiRefresh;
+use cached::proc_macro::once;
 use regex::Regex;
 use scraper::{Html, Selector};
 use url::{ParseError, Url};
 
+#[derive(Clone)]
 pub struct Book {
     pub title: String,
     pub author: String,
@@ -33,39 +35,45 @@ impl ApiRefresh for Book {
     type Content = Book;
 
     async fn fetch_newest(n: u32) -> Result<std::vec::Vec<Book>, Box<dyn std::error::Error>> {
-        let shelf = std::env::var("GOODREADS_SHELF")?;
-        let html = Html::parse_document(
-            &reqwest::get(&shelf)
-                .await
-                .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?
-                .text()
-                .await
-                .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?,
-        );
-
-        let row_selector = Selector::parse(r"tr.bookalike.review").unwrap();
-
-        let title_selector = Selector::parse(r"td.field.title a").unwrap();
-        let author_selector = Selector::parse(r"td.field.author a").unwrap();
-
-        Ok(html
-            .select(&row_selector)
-            .filter_map(|row| {
-                let title_element = row.select(&title_selector).next()?;
-                let title_href = title_element.value().attr("href")?;
-
-                let author_element = row.select(&author_selector).next()?;
-                let author_href = author_element.value().attr("href")?;
-
-                Some(Book {
-                    title: clean_text(&title_element.text().collect::<Vec<_>>().concat()),
-                    author: swap_name_order(&author_element.text().collect::<Vec<_>>().concat())
-                        .ok()?,
-                    title_url: create_goodreads_url(title_href).ok()?,
-                    author_url: create_goodreads_url(author_href).ok()?,
-                })
-            })
-            .take(n as usize)
-            .collect())
+        fetch_newest_books(n).await
     }
+}
+
+// 1 day
+#[once(result = true, time = 86400)]
+async fn fetch_newest_books(n: u32) -> Result<std::vec::Vec<Book>, Box<dyn std::error::Error>> {
+    let shelf = std::env::var("GOODREADS_SHELF")?;
+    let html = Html::parse_document(
+        &reqwest::get(&shelf)
+            .await
+            .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?
+            .text()
+            .await
+            .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?,
+    );
+
+    let row_selector = Selector::parse(r"tr.bookalike.review").unwrap();
+
+    let title_selector = Selector::parse(r"td.field.title a").unwrap();
+    let author_selector = Selector::parse(r"td.field.author a").unwrap();
+
+    Ok(html
+        .select(&row_selector)
+        .filter_map(|row| {
+            let title_element = row.select(&title_selector).next()?;
+            let title_href = title_element.value().attr("href")?;
+
+            let author_element = row.select(&author_selector).next()?;
+            let author_href = author_element.value().attr("href")?;
+
+            Some(Book {
+                title: clean_text(&title_element.text().collect::<Vec<_>>().concat()),
+                author: swap_name_order(&author_element.text().collect::<Vec<_>>().concat())
+                    .ok()?,
+                title_url: create_goodreads_url(title_href).ok()?,
+                author_url: create_goodreads_url(author_href).ok()?,
+            })
+        })
+        .take(n as usize)
+        .collect())
 }

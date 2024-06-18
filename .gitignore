@@ -19,3 +19,6 @@ Cargo.lock
 
 # env file containing API keys
 .env
+
+# multitarget directory
+/dist

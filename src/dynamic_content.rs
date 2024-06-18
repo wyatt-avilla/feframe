@@ -1,3 +1,4 @@
+pub mod cache;
 pub mod github;
 pub mod goodreads;
 pub mod lastfm;

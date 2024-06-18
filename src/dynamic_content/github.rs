@@ -1,3 +1,4 @@
+use super::cache::ApiRefresh;
 use reqwest::{self, header};
 use url::Url;
 
@@ -8,48 +9,50 @@ pub struct Commit {
     pub repository_link: Url,
 }
 
-pub async fn get_recent_commits(
-    n: u32,
-) -> Result<std::vec::Vec<Commit>, Box<dyn std::error::Error>> {
-    let username = std::env::var("GH_USERNAME")?;
+impl ApiRefresh for Commit {
+    type Content = Commit;
 
-    let url = format!("https://api.github.com/users/{username}/events");
+    async fn fetch_newest(n: u32) -> Result<std::vec::Vec<Commit>, Box<dyn std::error::Error>> {
+        let username = std::env::var("GH_USERNAME")?;
 
-    let client = reqwest::Client::new();
-    let response = client
-        .get(&url)
-        .header(header::USER_AGENT, "pulse")
-        .send()
-        .await?
-        .text()
-        .await?;
+        let url = format!("https://api.github.com/users/{username}/events");
 
-    let json: serde_json::Value = serde_json::from_str(&response)
-        .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?;
+        let client = reqwest::Client::new();
+        let response = client
+            .get(&url)
+            .header(header::USER_AGENT, "pulse")
+            .send()
+            .await?
+            .text()
+            .await?;
 
-    let events = match json.as_array() {
-        Some(events) => events.clone(),
-        None => return Ok(Vec::new()),
-    };
+        let json: serde_json::Value = serde_json::from_str(&response)
+            .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?;
 
-    let commits: Vec<_> = events
-        .iter()
-        .filter(|&event| event["type"] == "PushEvent")
-        .cloned()
-        .collect();
+        let events = match json.as_array() {
+            Some(events) => events.clone(),
+            None => return Ok(Vec::new()),
+        };
 
-    Ok(commits
-        .iter()
-        .filter_map(|commit| {
-            Some(Commit {
-                message: commit["payload"]["commits"][0]["message"]
-                    .as_str()?
-                    .to_string(),
-                url: Url::parse(commit["payload"]["commits"][0]["url"].as_str()?).ok()?,
-                repository_name: commit["repo"]["name"].as_str()?.to_string(),
-                repository_link: Url::parse(commit["repo"]["url"].as_str()?).ok()?,
+        let commits: Vec<_> = events
+            .iter()
+            .filter(|&event| event["type"] == "PushEvent")
+            .cloned()
+            .collect();
+
+        Ok(commits
+            .iter()
+            .filter_map(|commit| {
+                Some(Commit {
+                    message: commit["payload"]["commits"][0]["message"]
+                        .as_str()?
+                        .to_string(),
+                    url: Url::parse(commit["payload"]["commits"][0]["url"].as_str()?).ok()?,
+                    repository_name: commit["repo"]["name"].as_str()?.to_string(),
+                    repository_link: Url::parse(commit["repo"]["url"].as_str()?).ok()?,
+                })
             })
-        })
-        .take(n as usize)
-        .collect())
+            .take(n as usize)
+            .collect())
+    }
 }

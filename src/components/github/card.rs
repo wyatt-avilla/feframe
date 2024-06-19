@@ -5,7 +5,7 @@ use yew::prelude::*;
 
 #[styled_component]
 pub fn Card() -> Html {
-    let title = "github body.rs title".to_string();
+    let title = "Recent Commits".to_string();
     html! {
     <div>
         <div class={css!(r#"
@@ -20,7 +20,7 @@ pub fn Card() -> Html {
                 padding: 15px;
                 box-sizing: border-box;
 
-                background-color: white;
+                background-color: #161b22;
             "#)} id="yew-sample-content">
             <div class={css!(r#"
                     flex: 1;
@@ -31,6 +31,7 @@ pub fn Card() -> Html {
                 <Button />
                 <h2 class={css!(r#"
                     margin-left: 20px;
+                    color: #E6EDF3;
                 "#)}>{ title }</h2>
             </div>
             <div class={css!(r#"

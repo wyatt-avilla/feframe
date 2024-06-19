@@ -7,9 +7,11 @@ use yew::prelude::*;
 pub fn Scroller() -> Html {
     let fake_commits: Vec<_> = (0..15)
         .map(|i| Commit {
-            message: format!("message {i}"),
+            message: format!(
+                "super duper long commit message that shoulddd take multiple lines {i}"
+            ),
             url: url::Url::parse("https://github.com/wyatt-avilla/feframe").unwrap(),
-            repository_name: format!("repo {i}"),
+            repository_name: format!("huge repo name xd {i}"),
             repository_link: url::Url::parse("https://github.com/wyatt-avilla/feframe").unwrap(),
         })
         .map(|commit| html! { <Row ..commit.clone() /> })
@@ -21,7 +23,7 @@ pub fn Scroller() -> Html {
             height: 100%;
             border-radius: 10px;
 
-            background: black;
+            background: #21262d;
 
             padding: 15px;
             box-sizing: border-box;

@@ -51,7 +51,7 @@ pub fn App() -> Html {
                     }
                 "#)}>
                     <components::github::Card />
-                    <components::github::Card />
+                    <components::lastfm::Card />
                 </div>
         </div>
     }

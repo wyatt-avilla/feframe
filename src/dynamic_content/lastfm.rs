@@ -1,8 +1,9 @@
 use super::ApiRefresh;
 use cached::proc_macro::once;
 use url::Url;
+use yew::Properties;
 
-#[derive(Clone)]
+#[derive(Clone, Properties, PartialEq)]
 pub struct Song {
     pub title: String,
     pub artist_name: String,

@@ -1,10 +1,11 @@
-use components::Card;
+mod card_generators;
+mod components;
+mod dynamic_content;
+
+use card_generators::placeholder_card_generator;
 use dynamic_content::{ApiRefresh, Book, Commit, Movie, Song};
 use stylist::yew::{styled_component, Global};
 use yew::prelude::*;
-
-mod components;
-mod dynamic_content;
 
 #[allow(dead_code)]
 async fn use_content() {
@@ -22,7 +23,7 @@ async fn use_content() {
 #[styled_component]
 pub fn App() -> Html {
     html! {
-        <>
+        <div>
             // Global Styles can be applied with <Global /> component.
             <Global css={css!(r#"
                     html, body {
@@ -40,12 +41,11 @@ pub fn App() -> Html {
                         background-color: rgb(237, 244, 255);
                     }
                 "#)} />
-            <Card />
-        </>
+            { placeholder_card_generator() }
+        </div>
     }
 }
 
 fn main() {
-    //dotenv::dotenv().ok();
     yew::Renderer::<App>::new().render();
 }

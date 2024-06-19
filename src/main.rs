@@ -39,7 +39,20 @@ pub fn App() -> Html {
                         background-color: rgb(237, 244, 255);
                     }
                 "#)} />
-                <components::github::Card />
+                <div class={css!(r#"
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: row;
+                    gap: 150px;
+                    
+                    @media screen and (max-width: 1500px) {
+                        flex-direction: column;
+                    }
+                "#)}>
+                    <components::github::Card />
+                    <components::github::Card />
+                </div>
         </div>
     }
 }

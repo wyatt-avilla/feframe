@@ -1,14 +1,19 @@
+use super::row::Row;
+use crate::dynamic_content::Commit;
 use stylist::yew::styled_component;
 use yew::prelude::*;
 
-#[derive(Properties, PartialEq, Clone)]
-pub struct ScrollerProps {
-    pub rows: Vec<Html>,
-}
-
 #[styled_component]
-pub fn Scroller(props: &ScrollerProps) -> Html {
-    let ScrollerProps { rows } = props;
+pub fn Scroller() -> Html {
+    let fake_commits: Vec<_> = (0..15)
+        .map(|i| Commit {
+            message: format!("message {i}"),
+            url: url::Url::parse("https://github.com/wyatt-avilla/feframe").unwrap(),
+            repository_name: format!("repo {i}"),
+            repository_link: url::Url::parse("https://github.com/wyatt-avilla/feframe").unwrap(),
+        })
+        .map(|commit| html! { <Row ..commit.clone() /> })
+        .collect();
 
     html! {
         <div class={css!(r#"
@@ -40,7 +45,7 @@ pub fn Scroller(props: &ScrollerProps) -> Html {
             scrollbar-width: none;
             -ms-overflow-style: none; /* Internet Explorer 10+ */
         "#)}>
-            { rows }
+            { fake_commits }
         </div>
     }
 }

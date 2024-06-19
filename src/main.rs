@@ -1,8 +1,6 @@
-mod card_generators;
 mod components;
 mod dynamic_content;
 
-use card_generators::generate_commit_card;
 use dynamic_content::{ApiRefresh, Book, Commit, Movie, Song};
 use stylist::yew::{styled_component, Global};
 use yew::prelude::*;
@@ -41,7 +39,7 @@ pub fn App() -> Html {
                         background-color: rgb(237, 244, 255);
                     }
                 "#)} />
-            { generate_commit_card() }
+                <components::github::Card />
         </div>
     }
 }

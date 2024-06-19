@@ -2,8 +2,9 @@ use super::ApiRefresh;
 use cached::proc_macro::once;
 use reqwest::{self, header};
 use url::Url;
+use yew::prelude::Properties;
 
-#[derive(Clone)]
+#[derive(Clone, Properties, PartialEq)]
 pub struct Commit {
     pub message: String,
     pub url: Url,

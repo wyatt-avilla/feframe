@@ -1,4 +1,3 @@
-mod content_rows;
 mod main_card;
 mod row_scroller;
 mod social_button;

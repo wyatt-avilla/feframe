@@ -26,9 +26,12 @@ pub fn Row(props: &Commit) -> Html {
             flex-direction: column;
             padding: 10px;
             border-bottom: 1px solid #8D96A0;
-            margin-bottom: 5px;
             box-sizing: border-box;
             background-color: none;
+            &:hover {
+                border-radius: 5px;
+                background-color: #2A3D52;
+            }
         "#)}>
             <div class={css!(r#"
                 display: flex;

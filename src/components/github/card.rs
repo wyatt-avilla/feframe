@@ -41,6 +41,7 @@ pub fn Card() -> Html {
                     align-items: center;
                     width: 100%;
                     overflow: hidden;
+                    border-radius: 10px;
                 "#)}>
                 <Scroller />
             </div>

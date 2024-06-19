@@ -1,4 +1,4 @@
-use crate::components::{ButtonProps, Card, ScrollerProps};
+use crate::components::{ButtonProps, Card, CardProps, ScrollerProps};
 use stylist::yew::styled_component;
 use yew::prelude::*;
 
@@ -47,7 +47,15 @@ pub fn placeholder_card_generator() -> Html {
             .collect(),
     };
 
+    let title = String::from("Title generated in placeholder_card_generator");
+
+    let card_props = CardProps {
+        title,
+        button_props,
+        scroller_props,
+    };
+
     html! {
-        < Card title={"my string literal"} button={ button_props } scroller={ scroller_props } />
+        < Card ..card_props.clone() />
     }
 }

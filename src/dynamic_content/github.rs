@@ -53,16 +53,16 @@ async fn fetch_newest_commits(n: u32) -> Result<std::vec::Vec<Commit>, Box<dyn s
 
     Ok(push_events
         .iter()
-        .filter_map(|commit| {
-            let commits = &commit["payload"]["commits"][0];
-            let repository_name = commit["repo"]["name"].as_str()?.to_string();
-            let repository_link = Url::parse(commit["repo"]["url"].as_str()?).ok()?;
-            let sha = &commits["sha"].as_str()?.to_string();
+        .filter_map(|event| {
+            let commit = &event["payload"]["commits"][0];
+            let repository_name = event["repo"]["name"].as_str()?.to_string();
+            let repository_link =
+                Url::parse(format!("https://github.com/{repository_name}/").as_str()).ok()?;
 
             Some(Commit {
-                message: commits["message"].as_str()?.to_string(),
+                message: commit["message"].as_str()?.to_string(),
                 url: Url::parse(
-                    format!("https://github.com/{repository_name}/commit/{sha}").as_str(),
+                    format!("{repository_link}/commit/{}", commit["sha"].as_str()?).as_str(),
                 )
                 .ok()?,
                 repository_name,

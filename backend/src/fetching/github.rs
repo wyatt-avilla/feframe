@@ -39,11 +39,11 @@ pub async fn fetch_newest(
         .filter_map(|event| {
             let commit = &event["payload"]["commits"][0];
             let repository_name = event["repo"]["name"].as_str()?.to_string();
-            let repository_link = format!("https://github.com/{repository_name}/");
+            let repository_link = format!("https://github.com/{repository_name}");
 
             Some(Commit {
                 message: commit["message"].as_str()?.to_string(),
-                url: format!("{repository_link}/commit/{}", commit["sha"]),
+                url: format!("{repository_link}/commit/{}", commit["sha"].as_str()?),
                 repository_name,
                 repository_link,
             })

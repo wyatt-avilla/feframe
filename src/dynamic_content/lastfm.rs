@@ -1,4 +1,5 @@
 use super::ApiRefresh;
+use crate::env::CONFIG;
 use cached::proc_macro::once;
 use url::Url;
 use yew::Properties;
@@ -23,8 +24,8 @@ impl ApiRefresh for Song {
 // 20 min
 #[once(result = true, time = 1200)]
 async fn fetch_newest_songs(n: u32) -> Result<std::vec::Vec<Song>, Box<dyn std::error::Error>> {
-    let key = std::env::var("LASTFM_KEY")?;
-    let username = std::env::var("LASTFM_USERNAME")?;
+    let key = CONFIG.key.lastfm;
+    let username = CONFIG.username.lastfm;
 
     let url = format!("https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={username}&api_key={key}&format=json");
 

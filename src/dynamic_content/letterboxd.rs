@@ -1,4 +1,5 @@
 use super::ApiRefresh;
+use crate::env::CONFIG;
 use cached::proc_macro::once;
 use scraper::{Html, Selector};
 use url::Url;
@@ -23,7 +24,7 @@ impl ApiRefresh for Movie {
 // 1 day
 #[once(result = true, time = 86400)]
 async fn fetch_newest_movies(n: u32) -> Result<std::vec::Vec<Movie>, Box<dyn std::error::Error>> {
-    let username = std::env::var("LETTERBOXD_USERNAME")?;
+    let username = CONFIG.username.letterboxd;
     let url = format!("https://letterboxd.com/{username}/films/by/rated-date/");
     let html = Html::parse_document(
         &reqwest::get(&url)

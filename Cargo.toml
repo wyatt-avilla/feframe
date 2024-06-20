@@ -6,8 +6,6 @@ build = "build.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[workspace]
-
 [dependencies]
 cached = {version = "0.51.4", features = ["async"]}
 dotenv = "0.15.0"
@@ -22,8 +20,8 @@ url = "2.5.1"
 wasm-bindgen-futures = "0.4.42"
 web-sys = "0.3.69"
 yew = { version = "0.21.0", features = ["csr"]}
-config = { path = "config" }
+dotenv_codegen = "0.15.0"
 
 [build-dependencies]
-dotenv = "0.15.0"
-config = { path = "config" }
+url = "2.5.1"
+dotenv_codegen = "0.15.0"

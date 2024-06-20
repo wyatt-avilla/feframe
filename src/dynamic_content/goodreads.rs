@@ -1,4 +1,5 @@
 use super::ApiRefresh;
+use crate::env::CONFIG;
 use cached::proc_macro::once;
 use regex::Regex;
 use scraper::{Html, Selector};
@@ -42,9 +43,9 @@ impl ApiRefresh for Book {
 // 1 day
 #[once(result = true, time = 86400)]
 async fn fetch_newest_books(n: u32) -> Result<std::vec::Vec<Book>, Box<dyn std::error::Error>> {
-    let shelf = std::env::var("GOODREADS_SHELF")?;
+    let shelf = CONFIG.link.goodreads;
     let html = Html::parse_document(
-        &reqwest::get(&shelf)
+        &reqwest::get(shelf)
             .await
             .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?
             .text()

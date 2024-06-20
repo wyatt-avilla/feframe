@@ -1,4 +1,5 @@
 use super::ApiRefresh;
+use crate::env::CONFIG;
 use cached::proc_macro::once;
 use reqwest::{self, header};
 use url::Url;
@@ -23,7 +24,7 @@ impl ApiRefresh for Commit {
 // 15 min
 #[once(result = true, time = 900)]
 async fn fetch_newest_commits(n: u32) -> Result<std::vec::Vec<Commit>, Box<dyn std::error::Error>> {
-    let username = std::env::var("GH_USERNAME")?;
+    let username = CONFIG.username.github;
 
     let url = format!("https://api.github.com/users/{username}/events");
 

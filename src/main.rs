@@ -1,5 +1,6 @@
 mod components;
 mod dynamic_content;
+mod env;
 
 use dynamic_content::{ApiRefresh, Book, Commit, Movie, Song};
 use stylist::yew::{styled_component, Global};

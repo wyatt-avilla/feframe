@@ -1,21 +1,23 @@
 use super::row::Row;
-use crate::dynamic_content::Commit;
+use crate::dynamic_content::{ApiRefresh, Commit};
 use stylist::yew::styled_component;
 use yew::prelude::*;
 
 #[styled_component]
 pub fn Scroller() -> Html {
-    let fake_commits: Vec<_> = (0..15)
-        .map(|i| Commit {
-            message: format!(
-                "super duper long commit message that shoulddd take multiple lines {i}"
-            ),
-            url: url::Url::parse("https://github.com/wyatt-avilla/feframe").unwrap(),
-            repository_name: format!("huge repo name xd {i}"),
-            repository_link: url::Url::parse("https://github.com/wyatt-avilla/feframe").unwrap(),
-        })
-        .map(|commit| html! { <Row ..commit.clone() /> })
-        .collect();
+    #[allow(clippy::redundant_closure)]
+    let commits = use_state(|| std::vec::Vec::new());
+    {
+        let commits = commits.clone();
+        use_effect_with((), move |()| {
+            let commits = commits.clone();
+            wasm_bindgen_futures::spawn_local(async move {
+                let fetched_commits: Vec<Commit> = Commit::fetch_newest(10).await.unwrap();
+                commits.set(fetched_commits);
+            });
+            || ()
+        });
+    }
 
     html! {
         <div class={css!(r#"
@@ -47,7 +49,7 @@ pub fn Scroller() -> Html {
             scrollbar-width: none;
             -ms-overflow-style: none; /* Internet Explorer 10+ */
         "#)}>
-            { fake_commits }
+            { commits.iter().map(|commit| html! { <Row ..commit.clone() /> }).collect::<Vec<_>>() }
         </div>
     }
 }

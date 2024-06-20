@@ -31,7 +31,7 @@ async fn fetch_newest_commits(n: u32) -> Result<std::vec::Vec<Commit>, Box<dyn s
     let client = reqwest::Client::new();
     let response = client
         .get(&url)
-        .header(header::USER_AGENT, "pulse")
+        .header(header::USER_AGENT, "feframe")
         .send()
         .await?
         .text()
@@ -40,27 +40,33 @@ async fn fetch_newest_commits(n: u32) -> Result<std::vec::Vec<Commit>, Box<dyn s
     let json: serde_json::Value = serde_json::from_str(&response)
         .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?;
 
-    let events = match json.as_array() {
-        Some(events) => events.clone(),
+    let json_array = match json.as_array() {
+        Some(json_array) => json_array.clone(),
         None => return Ok(Vec::new()),
     };
 
-    let commits: Vec<_> = events
+    let push_events: Vec<_> = json_array
         .iter()
         .filter(|&event| event["type"] == "PushEvent")
         .cloned()
         .collect();
 
-    Ok(commits
+    Ok(push_events
         .iter()
         .filter_map(|commit| {
+            let commits = &commit["payload"]["commits"][0];
+            let repository_name = commit["repo"]["name"].as_str()?.to_string();
+            let repository_link = Url::parse(commit["repo"]["url"].as_str()?).ok()?;
+            let sha = &commits["sha"].as_str()?.to_string();
+
             Some(Commit {
-                message: commit["payload"]["commits"][0]["message"]
-                    .as_str()?
-                    .to_string(),
-                url: Url::parse(commit["payload"]["commits"][0]["url"].as_str()?).ok()?,
-                repository_name: commit["repo"]["name"].as_str()?.to_string(),
-                repository_link: Url::parse(commit["repo"]["url"].as_str()?).ok()?,
+                message: commits["message"].as_str()?.to_string(),
+                url: Url::parse(
+                    format!("https://github.com/{repository_name}/commit/{sha}").as_str(),
+                )
+                .ok()?,
+                repository_name,
+                repository_link,
             })
         })
         .take(n as usize)

@@ -1,12 +1,13 @@
+use serde::{Deserialize, Serialize};
 use url::Url;
 use yew::Properties;
 
-#[derive(Clone, Properties, PartialEq)]
+#[derive(Clone, Properties, PartialEq, Serialize, Deserialize, Debug)]
 pub struct Commit {
     pub message: String,
-    pub url: Url,
+    pub url: String,
     pub repository_name: String,
-    pub repository_link: Url,
+    pub repository_link: String,
 }
 
 #[derive(Clone, Properties, PartialEq)]

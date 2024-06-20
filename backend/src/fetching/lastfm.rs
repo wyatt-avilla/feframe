@@ -4,7 +4,7 @@ use url::Url;
 
 // 20 min
 #[once(result = true, time = 1200)]
-async fn fetch_newest_songs(
+async fn fetch_newest(
     username: &str,
     key: &str,
     n: u32,

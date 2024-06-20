@@ -14,12 +14,12 @@ pub const ENV: Env = Env {
     },
 };
 
-pub const ENDPIONT: Endpoint = Endpoint {
-    base: "nothing",
-    github: "nothing",
-    lastfm: "nothing",
-    letterboxd: "nothing",
-    goodreads: "nothing",
+pub const ENDPOINT: Endpoint = Endpoint {
+    base: "127.0.0.1:8080",
+    github: "/api/github",
+    lastfm: "/api/lastfm",
+    letterboxd: "/api/letterboxd",
+    goodreads: "/api/goodreads",
 };
 
 pub struct Endpoint<'a> {

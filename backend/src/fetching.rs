@@ -1,4 +1,4 @@
-mod github;
-mod goodreads;
-mod lastfm;
-mod letterboxd;
+pub mod github;
+pub mod goodreads;
+pub mod lastfm;
+pub mod letterboxd;

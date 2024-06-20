@@ -5,7 +5,7 @@ use url::Url;
 
 // 1 day
 #[once(result = true, time = 86400)]
-async fn fetch_newest_movies(
+async fn fetch_newest(
     username: &str,
     n: u32,
 ) -> Result<std::vec::Vec<Movie>, Box<dyn std::error::Error>> {

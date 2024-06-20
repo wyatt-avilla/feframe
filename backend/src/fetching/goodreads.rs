@@ -25,7 +25,7 @@ fn swap_name_order(full_name: &str) -> Result<String, String> {
 
 // 1 day
 #[once(result = true, time = 86400)]
-async fn fetch_newest_books(
+async fn fetch_newest(
     shelf: &str,
     n: u32,
 ) -> Result<std::vec::Vec<Book>, Box<dyn std::error::Error>> {

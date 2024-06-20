@@ -1,14 +1,14 @@
 use cached::proc_macro::once;
 use reqwest::{self, header};
 use types::Commit;
-use url::Url;
 
 // 15 min
 #[once(result = true, time = 900)]
-async fn fetch_newest_commits(
+pub async fn fetch_newest(
     username: &str,
     n: u32,
 ) -> Result<std::vec::Vec<Commit>, Box<dyn std::error::Error>> {
+    println!("Fetching data from github api...");
     let url = format!("https://api.github.com/users/{username}/events");
 
     let client = reqwest::Client::new();
@@ -39,15 +39,11 @@ async fn fetch_newest_commits(
         .filter_map(|event| {
             let commit = &event["payload"]["commits"][0];
             let repository_name = event["repo"]["name"].as_str()?.to_string();
-            let repository_link =
-                Url::parse(format!("https://github.com/{repository_name}/").as_str()).ok()?;
+            let repository_link = format!("https://github.com/{repository_name}/");
 
             Some(Commit {
                 message: commit["message"].as_str()?.to_string(),
-                url: Url::parse(
-                    format!("{repository_link}/commit/{}", commit["sha"].as_str()?).as_str(),
-                )
-                .ok()?,
+                url: format!("{repository_link}/commit/{}", commit["sha"]),
                 repository_name,
                 repository_link,
             })

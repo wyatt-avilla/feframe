@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use url::Url;
 use yew::Properties;
 
 #[derive(Clone, Properties, PartialEq, Serialize, Deserialize)]
@@ -10,19 +9,19 @@ pub struct Commit {
     pub repository_link: String,
 }
 
-#[derive(Clone, Properties, PartialEq)]
+#[derive(Clone, Properties, PartialEq, Serialize, Deserialize)]
 pub struct Movie {
     pub title: String,
     pub rating: String,
-    pub url: Url,
+    pub url: String,
 }
 
-#[derive(Clone, Properties, PartialEq)]
+#[derive(Clone, Properties, PartialEq, Serialize, Deserialize)]
 pub struct Book {
     pub title: String,
     pub author: String,
-    pub title_url: Url,
-    pub author_url: Url,
+    pub title_url: String,
+    pub author_url: String,
 }
 
 #[derive(Clone, Properties, PartialEq, Serialize, Deserialize)]

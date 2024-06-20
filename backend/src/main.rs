@@ -19,6 +19,22 @@ async fn lastfm() -> impl Responder {
     )
 }
 
+async fn goodreads() -> impl Responder {
+    web::Json(
+        fetching::goodreads::fetch_newest(ENV.link.goodreads, 10)
+            .await
+            .unwrap(),
+    )
+}
+
+async fn letterboxd() -> impl Responder {
+    web::Json(
+        fetching::letterboxd::fetch_newest(ENV.username.letterboxd, 10)
+            .await
+            .unwrap(),
+    )
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     println!("Hello, Server!");
@@ -26,6 +42,8 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .route(ENDPOINT.github, web::get().to(github))
             .route(ENDPOINT.lastfm, web::get().to(lastfm))
+            .route(ENDPOINT.goodreads, web::get().to(goodreads))
+            .route(ENDPOINT.letterboxd, web::get().to(letterboxd))
             .service(actix_files::Files::new("/", "../frontend/dist").index_file("index.html"))
     })
     .bind(ENDPOINT.base)?

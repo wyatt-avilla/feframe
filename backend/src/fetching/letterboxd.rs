@@ -1,11 +1,10 @@
 use cached::proc_macro::once;
 use scraper::{Html, Selector};
 use types::Movie;
-use url::Url;
 
 // 1 day
 #[once(result = true, time = 86400)]
-async fn fetch_newest(
+pub async fn fetch_newest(
     username: &str,
     n: u32,
 ) -> Result<std::vec::Vec<Movie>, Box<dyn std::error::Error>> {
@@ -50,7 +49,7 @@ async fn fetch_newest(
             Some(Movie {
                 title,
                 rating,
-                url: Url::parse(format! {"https://letterboxd.com{link}"}.as_str()).ok()?,
+                url: format! {"https://letterboxd.com{link}"},
             })
         })
         .take(n as usize)

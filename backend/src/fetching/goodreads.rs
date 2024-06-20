@@ -2,16 +2,11 @@ use cached::proc_macro::once;
 use regex::Regex;
 use scraper::{Html, Selector};
 use types::Book;
-use url::{ParseError, Url};
 
 fn clean_text(input: &str) -> String {
     let trimmed = input.trim().replace(['\n', '\r'], "");
     let re = Regex::new(r"\s{2,}").unwrap();
     re.replace_all(&trimmed, " ").to_string()
-}
-
-fn create_goodreads_url(path: &str) -> Result<Url, ParseError> {
-    Url::parse(&format!("https://www.goodreads.com/{path}"))
 }
 
 fn swap_name_order(full_name: &str) -> Result<String, String> {
@@ -25,7 +20,7 @@ fn swap_name_order(full_name: &str) -> Result<String, String> {
 
 // 1 day
 #[once(result = true, time = 86400)]
-async fn fetch_newest(
+pub async fn fetch_newest(
     shelf: &str,
     n: u32,
 ) -> Result<std::vec::Vec<Book>, Box<dyn std::error::Error>> {
@@ -56,8 +51,8 @@ async fn fetch_newest(
                 title: clean_text(&title_element.text().collect::<Vec<_>>().concat()),
                 author: swap_name_order(&author_element.text().collect::<Vec<_>>().concat())
                     .ok()?,
-                title_url: create_goodreads_url(title_href).ok()?,
-                author_url: create_goodreads_url(author_href).ok()?,
+                title_url: format!("https://www.goodreads.com/{title_href}"),
+                author_url: format!("https://www.goodreads.com/{author_href}"),
             })
         })
         .take(n as usize)

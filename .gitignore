@@ -21,4 +21,5 @@ Cargo.lock
 .env
 
 # multitarget directory
-/dist
+/frontend/dist
+/frontend/index.html

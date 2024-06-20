@@ -1,6 +1,6 @@
 use super::row::Row;
-use crate::dynamic_content::Song;
 use stylist::yew::styled_component;
+use types::Song;
 use yew::prelude::*;
 
 #[styled_component]

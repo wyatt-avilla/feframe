@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+    <head>
+<link rel="modulepreload" href="/frontend-a85560dfd2c1fa31.js" crossorigin=anonymous integrity="sha384-353ywIGPHXB0V4RrXN9jpAC0O1pt+D5vzCEjj17MGwyKaWQlxq0Il5NDKVvSsMnV">
+<link rel="preload" href="/frontend-a85560dfd2c1fa31_bg.wasm" crossorigin=anonymous integrity="sha384-YDxKrJjOvDI421BIQd91sEueYrKryI/spVdc6eER3SU25MHOvvNVqPagkXdQsXRZ" as="fetch" type="application/wasm"></head>
+    <body>
+<script type="module" nonce="6Y5JkLeE1Ed9T14zCYtmSA==">
+import init, * as bindings from '/frontend-a85560dfd2c1fa31.js';
+const wasm = await init('/frontend-a85560dfd2c1fa31_bg.wasm');
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script></body>
+</html>

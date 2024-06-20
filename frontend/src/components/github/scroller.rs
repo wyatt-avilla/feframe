@@ -1,23 +1,32 @@
 use super::row::Row;
-use crate::dynamic_content::{ApiRefresh, Commit};
 use stylist::yew::styled_component;
+use types::Commit;
 use yew::prelude::*;
 
 #[styled_component]
 pub fn Scroller() -> Html {
-    #[allow(clippy::redundant_closure)]
-    let commits = use_state(|| std::vec::Vec::new());
-    {
-        let commits = commits.clone();
-        use_effect_with((), move |()| {
-            let commits = commits.clone();
-            wasm_bindgen_futures::spawn_local(async move {
-                let fetched_commits: Vec<Commit> = Commit::fetch_newest(10).await.unwrap();
-                commits.set(fetched_commits);
-            });
-            || ()
-        });
-    }
+    // #[allow(clippy::redundant_closure)]
+    // let commits = use_state(|| std::vec::Vec::new());
+    // {
+    //     let commits = commits.clone();
+    //     use_effect_with((), move |()| {
+    //         let commits = commits.clone();
+    //         wasm_bindgen_futures::spawn_local(async move {
+    //             let fetched_commits: Vec<Commit> = Commit::fetch_newest(10).await.unwrap();
+    //             commits.set(fetched_commits);
+    //         });
+    //         || ()
+    //     });
+    // }
+
+    let commits: Vec<_> = (0..15)
+        .map(|i| Commit {
+            message: format!("message {i}"),
+            repository_name: format!("repo name {i}"),
+            url: url::Url::parse("https://github.com/wyatt-avilla/feframe").unwrap(),
+            repository_link: url::Url::parse("https://github.com/wyatt-avilla/feframe").unwrap(),
+        })
+        .collect();
 
     html! {
         <div class={css!(r#"

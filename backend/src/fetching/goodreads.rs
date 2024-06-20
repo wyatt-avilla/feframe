@@ -1,17 +1,8 @@
-use super::ApiRefresh;
-use crate::env::CONFIG;
 use cached::proc_macro::once;
 use regex::Regex;
 use scraper::{Html, Selector};
+use types::Book;
 use url::{ParseError, Url};
-
-#[derive(Clone)]
-pub struct Book {
-    pub title: String,
-    pub author: String,
-    pub title_url: Url,
-    pub author_url: Url,
-}
 
 fn clean_text(input: &str) -> String {
     let trimmed = input.trim().replace(['\n', '\r'], "");
@@ -32,18 +23,12 @@ fn swap_name_order(full_name: &str) -> Result<String, String> {
     Ok(format!("{first} {last}"))
 }
 
-impl ApiRefresh for Book {
-    type Content = Book;
-
-    async fn fetch_newest(n: u32) -> Result<std::vec::Vec<Book>, Box<dyn std::error::Error>> {
-        fetch_newest_books(n).await
-    }
-}
-
 // 1 day
 #[once(result = true, time = 86400)]
-async fn fetch_newest_books(n: u32) -> Result<std::vec::Vec<Book>, Box<dyn std::error::Error>> {
-    let shelf = CONFIG.link.goodreads;
+async fn fetch_newest_books(
+    shelf: &str,
+    n: u32,
+) -> Result<std::vec::Vec<Book>, Box<dyn std::error::Error>> {
     let html = Html::parse_document(
         &reqwest::get(shelf)
             .await

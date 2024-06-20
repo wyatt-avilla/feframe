@@ -1,30 +1,14 @@
-use super::ApiRefresh;
-use crate::env::CONFIG;
 use cached::proc_macro::once;
 use scraper::{Html, Selector};
+use types::Movie;
 use url::Url;
-
-#[derive(Clone)]
-pub struct Movie {
-    pub title: String,
-    pub rating: String,
-    pub url: Url,
-}
-
-impl ApiRefresh for Movie {
-    type Content = Movie;
-
-    async fn fetch_newest(
-        n: u32,
-    ) -> Result<std::vec::Vec<Self::Content>, Box<dyn std::error::Error>> {
-        fetch_newest_movies(n).await
-    }
-}
 
 // 1 day
 #[once(result = true, time = 86400)]
-async fn fetch_newest_movies(n: u32) -> Result<std::vec::Vec<Movie>, Box<dyn std::error::Error>> {
-    let username = CONFIG.username.letterboxd;
+async fn fetch_newest_movies(
+    username: &str,
+    n: u32,
+) -> Result<std::vec::Vec<Movie>, Box<dyn std::error::Error>> {
     let url = format!("https://letterboxd.com/{username}/films/by/rated-date/");
     let html = Html::parse_document(
         &reqwest::get(&url)

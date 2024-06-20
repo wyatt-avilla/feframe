@@ -1,7 +1,7 @@
 use stylist::yew::styled_component;
 use yew::prelude::*;
 
-use crate::dynamic_content::Song;
+use types::Song;
 
 #[styled_component]
 pub fn Row(props: &Song) -> Html {

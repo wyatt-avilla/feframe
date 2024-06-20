@@ -1,4 +1,4 @@
-workspace = { members = ["backend", "types"] }
+workspace = { members = ["backend", "config", "frontend", "types"] }
 [package]
 name = "pulse"
 version = "0.1.0"

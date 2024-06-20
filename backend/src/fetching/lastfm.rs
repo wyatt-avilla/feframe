@@ -1,32 +1,14 @@
-use super::ApiRefresh;
-use crate::env::CONFIG;
 use cached::proc_macro::once;
+use types::Song;
 use url::Url;
-use yew::Properties;
-
-#[derive(Clone, Properties, PartialEq)]
-pub struct Song {
-    pub title: String,
-    pub artist_name: String,
-    pub album_name: String,
-    pub album_image: Url,
-    pub url: Url,
-}
-
-impl ApiRefresh for Song {
-    type Content = Song;
-
-    async fn fetch_newest(n: u32) -> Result<std::vec::Vec<Song>, Box<dyn std::error::Error>> {
-        fetch_newest_songs(n).await
-    }
-}
 
 // 20 min
 #[once(result = true, time = 1200)]
-async fn fetch_newest_songs(n: u32) -> Result<std::vec::Vec<Song>, Box<dyn std::error::Error>> {
-    let key = CONFIG.key.lastfm;
-    let username = CONFIG.username.lastfm;
-
+async fn fetch_newest_songs(
+    username: &str,
+    key: &str,
+    n: u32,
+) -> Result<std::vec::Vec<Song>, Box<dyn std::error::Error>> {
     let url = format!("https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={username}&api_key={key}&format=json");
 
     let response = reqwest::get(&url)

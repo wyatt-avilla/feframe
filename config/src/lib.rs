@@ -1,6 +1,6 @@
 use dotenv_codegen::dotenv;
 
-pub const CONFIG: Config = Config {
+pub const ENV: Env = Env {
     username: Username {
         github: dotenv!("GH_USERNAME"),
         lastfm: dotenv!("LASTFM_USERNAME"),
@@ -14,7 +14,23 @@ pub const CONFIG: Config = Config {
     },
 };
 
-pub struct Config<'a> {
+pub const ENDPIONT: Endpoint = Endpoint {
+    base: "nothing",
+    github: "nothing",
+    lastfm: "nothing",
+    letterboxd: "nothing",
+    goodreads: "nothing",
+};
+
+pub struct Endpoint<'a> {
+    pub base: &'a str,
+    pub github: &'a str,
+    pub lastfm: &'a str,
+    pub letterboxd: &'a str,
+    pub goodreads: &'a str,
+}
+
+pub struct Env<'a> {
     pub username: Username<'a>,
     pub link: Link<'a>,
     pub key: Key<'a>,

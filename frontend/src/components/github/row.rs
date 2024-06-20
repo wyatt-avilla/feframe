@@ -1,7 +1,7 @@
 use stylist::yew::styled_component;
 use yew::prelude::*;
 
-use crate::dynamic_content::Commit;
+use types::Commit;
 
 #[styled_component]
 pub fn Row(props: &Commit) -> Html {

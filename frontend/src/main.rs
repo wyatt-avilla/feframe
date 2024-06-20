@@ -1,23 +1,7 @@
 mod components;
-mod dynamic_content;
-mod env;
 
-use dynamic_content::{ApiRefresh, Book, Commit, Movie, Song};
 use stylist::yew::{styled_component, Global};
 use yew::prelude::*;
-
-#[allow(dead_code)]
-async fn use_content() {
-    let commit = &Commit::fetch_newest(1).await.unwrap()[0];
-    let book = &Book::fetch_newest(1).await.unwrap()[0];
-    let song = &Song::fetch_newest(1).await.unwrap()[0];
-    let movie = &Movie::fetch_newest(1).await.unwrap()[0];
-
-    println!(
-        "{}, {}, {}, {}",
-        commit.repository_name, book.title, song.title, movie.title
-    );
-}
 
 #[styled_component]
 pub fn App() -> Html {

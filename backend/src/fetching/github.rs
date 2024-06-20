@@ -1,31 +1,14 @@
-use super::ApiRefresh;
-use crate::env::CONFIG;
 use cached::proc_macro::once;
 use reqwest::{self, header};
+use types::Commit;
 use url::Url;
-use yew::prelude::Properties;
-
-#[derive(Clone, Properties, PartialEq)]
-pub struct Commit {
-    pub message: String,
-    pub url: Url,
-    pub repository_name: String,
-    pub repository_link: Url,
-}
-
-impl ApiRefresh for Commit {
-    type Content = Commit;
-
-    async fn fetch_newest(n: u32) -> Result<std::vec::Vec<Commit>, Box<dyn std::error::Error>> {
-        fetch_newest_commits(n).await
-    }
-}
 
 // 15 min
 #[once(result = true, time = 900)]
-async fn fetch_newest_commits(n: u32) -> Result<std::vec::Vec<Commit>, Box<dyn std::error::Error>> {
-    let username = CONFIG.username.github;
-
+async fn fetch_newest_commits(
+    username: &str,
+    n: u32,
+) -> Result<std::vec::Vec<Commit>, Box<dyn std::error::Error>> {
     let url = format!("https://api.github.com/users/{username}/events");
 
     let client = reqwest::Client::new();

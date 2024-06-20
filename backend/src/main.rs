@@ -2,6 +2,8 @@ use actix_web::{web, App, HttpServer, Responder};
 use cached::proc_macro::once;
 use rand::prelude::Rng;
 
+mod fetching;
+
 #[once(result = true, time = 10)]
 fn get_cached_data() -> Result<String, Box<dyn std::error::Error>> {
     let mut rng = rand::thread_rng();
@@ -19,7 +21,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
             .route("/api/data", web::get().to(api_handler))
-            .service(actix_files::Files::new("/", "../dist").index_file("index.html"))
+            .service(actix_files::Files::new("/", "../frontend/dist").index_file("index.html"))
     })
     .bind("127.0.0.1:8080")?
     .run()

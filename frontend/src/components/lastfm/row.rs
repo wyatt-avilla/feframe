@@ -58,7 +58,7 @@ pub fn Row(props: &Song) -> Html {
                 "#)}>
                     { format!("{title} - {artist_name}") }
                 </a>
-                <a href={url.to_string().clone()} class={css!(r#"
+                <a href={url.clone()} class={css!(r#"
                     display: flex;
                     align-items: top-center;
                 "#)}>

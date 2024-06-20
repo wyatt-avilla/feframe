@@ -1,23 +1,27 @@
 use super::row::Row;
+use config::ENDPOINT;
 use stylist::yew::styled_component;
 use types::Song;
 use yew::prelude::*;
 
 #[styled_component]
 pub fn Scroller() -> Html {
-    let fake_songs: Vec<_> = (0..15)
-        .map(|i| Song {
-            title: format!("title {i}"),
-            artist_name: format!("super long artist name {i}"),
-            album_name: format!("album {i}"),
-            url: url::Url::parse("https://github.com/wyatt-avilla/feframe").unwrap(),
-            album_image: url::Url::parse(
-                "https://lastfm.freetls.fastly.net/i/u/64s/3a0aa3e03cbd5467297f397e67a80cd4.jpg",
-            )
-            .unwrap(),
-        })
-        .map(|song| html! { <Row ..song.clone() /> })
-        .collect();
+    #[allow(clippy::redundant_closure)]
+    let songs = use_state(|| std::vec::Vec::new());
+    {
+        let songs = songs.clone();
+        use_effect_with((), move |()| {
+            let songs = songs.clone();
+            wasm_bindgen_futures::spawn_local(async move {
+                let response = reqwest::get(format!("http://{}{}", ENDPOINT.base, ENDPOINT.lastfm))
+                    .await
+                    .unwrap();
+                let fetched_songs: Vec<Song> = response.json().await.unwrap();
+                songs.set(fetched_songs);
+            });
+            || ()
+        });
+    }
 
     html! {
         <div class={css!(r#"
@@ -49,7 +53,7 @@ pub fn Scroller() -> Html {
             scrollbar-width: none;
             -ms-overflow-style: none; /* Internet Explorer 10+ */
         "#)}>
-            { fake_songs }
+            { songs.iter().map(|commit| html! { <Row ..commit.clone() /> }).collect::<Vec<_>>() }
         </div>
     }
 }

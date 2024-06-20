@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use url::Url;
 use yew::Properties;
 
-#[derive(Clone, Properties, PartialEq, Serialize, Deserialize, Debug)]
+#[derive(Clone, Properties, PartialEq, Serialize, Deserialize)]
 pub struct Commit {
     pub message: String,
     pub url: String,
@@ -25,11 +25,11 @@ pub struct Book {
     pub author_url: Url,
 }
 
-#[derive(Clone, Properties, PartialEq)]
+#[derive(Clone, Properties, PartialEq, Serialize, Deserialize)]
 pub struct Song {
     pub title: String,
     pub artist_name: String,
     pub album_name: String,
-    pub album_image: Url,
-    pub url: Url,
+    pub album_image: String,
+    pub url: String,
 }

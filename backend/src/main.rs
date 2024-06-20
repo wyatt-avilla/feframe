@@ -11,12 +11,21 @@ async fn github() -> impl Responder {
     )
 }
 
+async fn lastfm() -> impl Responder {
+    web::Json(
+        fetching::lastfm::fetch_newest(ENV.username.lastfm, ENV.key.lastfm, 10)
+            .await
+            .unwrap(),
+    )
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     println!("Hello, Server!");
     HttpServer::new(|| {
         App::new()
             .route(ENDPOINT.github, web::get().to(github))
+            .route(ENDPOINT.lastfm, web::get().to(lastfm))
             .service(actix_files::Files::new("/", "../frontend/dist").index_file("index.html"))
     })
     .bind(ENDPOINT.base)?

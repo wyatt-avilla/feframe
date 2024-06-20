@@ -1,14 +1,14 @@
 use cached::proc_macro::once;
 use types::Song;
-use url::Url;
 
 // 20 min
 #[once(result = true, time = 1200)]
-async fn fetch_newest(
+pub async fn fetch_newest(
     username: &str,
     key: &str,
     n: u32,
 ) -> Result<std::vec::Vec<Song>, Box<dyn std::error::Error>> {
+    println!("Fetching data from lastfm api...");
     let url = format!("https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={username}&api_key={key}&format=json");
 
     let response = reqwest::get(&url)
@@ -33,9 +33,13 @@ async fn fetch_newest(
                 title: track["name"].as_str()?.to_string(),
                 artist_name: track["artist"]["#text"].as_str()?.to_string(),
                 album_name: track["album"]["#text"].as_str()?.to_string(),
-                album_image: Url::parse(track["image"].as_array()?.get(1)?.get("#text")?.as_str()?)
-                    .ok()?,
-                url: Url::parse(track["url"].as_str()?).ok()?,
+                album_image: track["image"]
+                    .as_array()?
+                    .first()?
+                    .get("#text")?
+                    .as_str()?
+                    .to_string(),
+                url: (track["url"]).as_str()?.to_string(),
             })
         })
         .take(n as usize)

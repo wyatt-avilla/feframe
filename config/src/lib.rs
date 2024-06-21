@@ -22,6 +22,20 @@ pub const ENDPOINT: Endpoint = Endpoint {
     goodreads: "/api/goodreads",
 };
 
+pub const SOCIAL: SocialLinks = SocialLinks {
+    github: "https://github.com/wyatt-avilla",
+    lastfm: "https://www.last.fm/user/wowitswyatt",
+    letterboxd: "https://letterboxd.com/wowitswyatt/",
+    goodreads: "https://www.goodreads.com/user/show/159014522-wowitswyatt",
+};
+
+pub struct SocialLinks<'a> {
+    pub github: &'a str,
+    pub lastfm: &'a str,
+    pub letterboxd: &'a str,
+    pub goodreads: &'a str,
+}
+
 pub struct Endpoint<'a> {
     pub base: &'a str,
     pub github: &'a str,

@@ -1,3 +1,4 @@
+use config::SOCIAL;
 use stylist::yew::styled_component;
 use yew::prelude::*;
 
@@ -17,16 +18,14 @@ pub fn Button() -> Html {
     </svg>
         };
 
-    let onclick = Callback::noop();
-
     html! {
-        <button class={css!(r#"
+        <a href={ SOCIAL.github } class={css!(r#"
                 background: none;
                 border: none;
                 cursor: pointer;
                 border-radius: 50%;
-            "#)} onclick={ onclick }>
+            "#)}>
                 { icon_svg.clone() }
-        </button>
+        </a>
     }
 }

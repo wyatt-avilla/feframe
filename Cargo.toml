@@ -1,6 +1,6 @@
 workspace = { members = ["backend", "config", "frontend", "types"] }
 
 [package]
-name = "pulse"
+name = "feframe"
 version = "0.1.0"
 edition = "2021"

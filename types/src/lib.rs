@@ -13,6 +13,7 @@ pub struct Commit {
 pub struct Movie {
     pub title: String,
     pub rating: String,
+    pub release_year: String,
     pub url: String,
     pub poster_url: String,
 }

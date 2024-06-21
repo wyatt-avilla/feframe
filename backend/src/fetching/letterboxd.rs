@@ -67,21 +67,18 @@ pub async fn fetch_newest(
                 .map(|r| r.inner_html())
                 .filter(|r| !r.is_empty())?;
 
-            let link = row
-                .select(&div_selector)
-                .next()?
-                .value()
-                .attr("data-target-link")?;
+            let div_val = row.select(&div_selector).next()?.value();
 
-            let slug = row
-                .select(&div_selector)
-                .next()?
-                .value()
-                .attr("data-film-slug")?;
+            let link = div_val.attr("data-target-link")?;
+
+            let slug = div_val.attr("data-film-slug")?;
+
+            let year = div_val.attr("data-film-release-year")?;
 
             Some(Movie {
                 title,
                 rating,
+                release_year: year.to_string(),
                 url: format! {"https://letterboxd.com{link}"},
                 poster_url: slug.to_string(),
             })

@@ -33,7 +33,7 @@ pub async fn fetch_newest(
     username: &str,
     n: u32,
 ) -> Result<std::vec::Vec<Movie>, Box<dyn std::error::Error>> {
-    println!("parsing letterboxd profile html...");
+    println!("Parsing letterboxd profile html...");
     let url = format!("https://letterboxd.com/{username}/films/by/rated-date/");
     let html = Html::parse_document(
         &reqwest::get(&url)

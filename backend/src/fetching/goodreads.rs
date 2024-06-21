@@ -25,7 +25,7 @@ pub async fn fetch_newest(
     shelf: &str,
     n: u32,
 ) -> Result<std::vec::Vec<Book>, Box<dyn std::error::Error>> {
-    println!("Fetching data from goodreads api...");
+    println!("Parsing goodreads shelf html...");
     let html = Html::parse_document(
         &reqwest::get(shelf)
             .await
@@ -48,6 +48,7 @@ pub async fn fetch_newest(
     let title_selector = Selector::parse(r"td.field.title a").unwrap();
     let author_selector = Selector::parse(r"td.field.author a").unwrap();
     let rating_selector = Selector::parse(r"td.field.rating span").unwrap();
+    let cover_selector = Selector::parse(r"td.field.cover img").unwrap();
 
     Ok(html
         .select(&row_selector)
@@ -56,17 +57,20 @@ pub async fn fetch_newest(
             let title_href = title_element.value().attr("href")?;
 
             let author_element = row.select(&author_selector).next()?;
-            let author_href = author_element.value().attr("href")?;
+            let author_href = row.select(&author_selector).next()?.value().attr("href")?;
 
             let rating = row.select(&rating_selector).next()?.value().attr("title")?;
+
+            let cover_url = row.select(&cover_selector).next()?.value().attr("src")?;
 
             Some(Book {
                 title: clean_text(&title_element.text().collect::<Vec<_>>().concat()),
                 author: swap_name_order(&author_element.text().collect::<Vec<_>>().concat())
                     .ok()?,
+                rating: ("★").repeat(*ratings.get(rating)?),
                 title_url: format!("https://www.goodreads.com/{title_href}"),
                 author_url: format!("https://www.goodreads.com/{author_href}"),
-                rating: ("★").repeat(*ratings.get(rating)?),
+                cover_url: cover_url.to_string(),
             })
         })
         .take(n as usize)

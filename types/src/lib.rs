@@ -22,9 +22,10 @@ pub struct Movie {
 pub struct Book {
     pub title: String,
     pub author: String,
+    pub rating: String,
     pub title_url: String,
     pub author_url: String,
-    pub rating: String,
+    pub cover_url: String,
 }
 
 #[derive(Clone, Properties, PartialEq, Serialize, Deserialize)]

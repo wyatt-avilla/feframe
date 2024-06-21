@@ -14,5 +14,5 @@ _/fɛfɹeɪm/_
 
 ### Frontend
 
-- [ ] Components
-- [ ] Styling
+- [x] Components
+- [x] Styling

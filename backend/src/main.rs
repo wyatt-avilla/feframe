@@ -37,7 +37,7 @@ async fn letterboxd() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    println!("Hello, Server!");
+    println!("Server opened on {}", ENDPOINT.base);
     HttpServer::new(|| {
         App::new()
             .route(ENDPOINT.github, web::get().to(github))

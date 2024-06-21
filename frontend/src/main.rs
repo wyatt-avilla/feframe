@@ -26,17 +26,38 @@ pub fn App() -> Html {
                 "#)} />
                 <div class={css!(r#"
                     display: flex;
-                    justify-content: center;
+                    flex-direction: column;
                     align-items: center;
-                    flex-direction: row;
-                    gap: 150px;
-                    
-                    @media screen and (max-width: 1500px) {
-                        flex-direction: column;
-                    }
+                    gap: 50px;
                 "#)}>
-                    <components::github::Card />
-                    <components::lastfm::Card />
+                    //<div class={css!(r#"
+                    //    display: flex;
+                    //    justify-content: center;
+                    //    align-items: center;
+                    //    flex-direction: row;
+                    //    gap: 150px;
+
+                    //    @media screen and (max-width: 1500px) {
+                    //        flex-direction: column;
+                    //    }
+                    //"#)}>
+                    //    <components::github::Card />
+                    //    <components::lastfm::Card />
+                    //</div>
+                    <div class={css!(r#"
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        flex-direction: row;
+                        gap: 150px;
+
+                        @media screen and (max-width: 1500px) {
+                            flex-direction: column;
+                        }
+                    "#)}>
+                        <components::letterboxd::Card />
+                        <components::letterboxd::Card />
+                    </div>
                 </div>
         </div>
     }

@@ -107,7 +107,7 @@ pub fn Card() -> Html {
                             gap: 5px;
                         "#)}>
                             { clock_svg }
-                            { Utc::now().with_timezone(&Pacific).format("%H:%M %p") }
+                            { Utc::now().with_timezone(&Pacific).format("%l:%M %p") }
                         </div>
                     </div>
                 </div>

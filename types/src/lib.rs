@@ -22,6 +22,7 @@ pub struct Book {
     pub author: String,
     pub title_url: String,
     pub author_url: String,
+    pub rating: String,
 }
 
 #[derive(Clone, Properties, PartialEq, Serialize, Deserialize)]

@@ -29,7 +29,7 @@ async fn goodreads() -> impl Responder {
 
 async fn letterboxd() -> impl Responder {
     web::Json(
-        fetching::letterboxd::fetch_newest(ENV.username.letterboxd, 10)
+        fetching::letterboxd::fetch_newest(ENV.username.letterboxd, 4)
             .await
             .unwrap(),
     )

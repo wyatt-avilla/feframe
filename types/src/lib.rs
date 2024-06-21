@@ -14,6 +14,7 @@ pub struct Movie {
     pub title: String,
     pub rating: String,
     pub url: String,
+    pub poster_url: String,
 }
 
 #[derive(Clone, Properties, PartialEq, Serialize, Deserialize)]

@@ -46,7 +46,7 @@ pub fn Card() -> Html {
                 box-sizing: border-box;
 
                 background-color: #766b90;
-            "#)} id="yew-sample-content">
+            "#)} id="profile-card">
                 <div class={css!(r#"
                     flex: 1;
                     display: flex;

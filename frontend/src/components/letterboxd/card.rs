@@ -21,7 +21,7 @@ pub fn Card() -> Html {
                 box-sizing: border-box;
 
                 background-color: #14181c;
-            "#)} id="yew-sample-content">
+            "#)} id="letterboxd card">
             <div class={css!(r#"
                     flex: 1;
                     display: flex;

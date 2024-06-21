@@ -21,7 +21,7 @@ pub fn Card() -> Html {
                 box-sizing: border-box;
 
                 background-color: #F9F9F9;
-            "#)} id="yew-sample-content">
+            "#)} id="lastfm card">
             <div class={css!(r#"
                     flex: 1;
                     display: flex;

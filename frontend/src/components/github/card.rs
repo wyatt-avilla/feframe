@@ -21,7 +21,7 @@ pub fn Card() -> Html {
                 box-sizing: border-box;
 
                 background-color: #161b22;
-            "#)} id="yew-sample-content">
+            "#)} id="github card">
             <div class={css!(r#"
                     flex: 1;
                     display: flex;

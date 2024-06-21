@@ -21,7 +21,7 @@ pub fn Card() -> Html {
                 box-sizing: border-box;
 
                 background-color: #F4F1EA;
-            "#)} id="yew-sample-content">
+            "#)} id="goodreads card">
             <div class={css!(r#"
                     flex: 1;
                     display: flex;

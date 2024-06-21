@@ -50,17 +50,29 @@ pub fn Row(props: &Song) -> Html {
                     width: 30px;
                     height: auto;
                 "#)} />
-                <a class={css!(r#"
-                    color: #222222;
-                    text-decoration: none;
-                    margin-right: 25px;
-                    margin-left: 25px;
-                "#)}>
-                    { format!("{title} - {artist_name}") }
-                </a>
+                    <div class={css!(r#"
+                        display: flex;
+                        flex-direction: column;
+                        flex-grow: 1;
+                        margin-left: 25px;
+                        margin-right: 25px;
+                    "#)}>
+                    <a class={css!(r#"
+                        color: #222222;
+                        text-decoration: none;
+                    "#)}>
+                        { format!("{title}") }
+                    </a>
+                    <a class={css!(r#"
+                        color: #666666;
+                        text-decoration: none;
+                    "#)}>
+                        { format!("{artist_name}") }
+                    </a>
+                </div>
                 <a href={url.clone()} class={css!(r#"
                     display: flex;
-                    align-items: top-center;
+                    align-items: center;
                 "#)}>
                     { play_svg.clone() }
                 </a>

@@ -68,8 +68,8 @@ pub async fn fetch_newest(
                 author: swap_name_order(&author_element.text().collect::<Vec<_>>().concat())
                     .ok()?,
                 rating: ("★").repeat(*ratings.get(rating)?),
-                title_url: format!("https://www.goodreads.com/{title_href}"),
-                author_url: format!("https://www.goodreads.com/{author_href}"),
+                title_url: format!("https://www.goodreads.com{title_href}"),
+                author_url: format!("https://www.goodreads.com{author_href}"),
                 cover_url: cover_url.to_string(),
             })
         })

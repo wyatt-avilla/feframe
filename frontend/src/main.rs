@@ -30,20 +30,6 @@ pub fn App() -> Html {
                     align-items: center;
                     gap: 50px;
                 "#)}>
-                    //<div class={css!(r#"
-                    //    display: flex;
-                    //    justify-content: center;
-                    //    align-items: center;
-                    //    flex-direction: row;
-                    //    gap: 150px;
-
-                    //    @media screen and (max-width: 1500px) {
-                    //        flex-direction: column;
-                    //    }
-                    //"#)}>
-                    //    <components::github::Card />
-                    //    <components::lastfm::Card />
-                    //</div>
                     <div class={css!(r#"
                         display: flex;
                         justify-content: center;
@@ -55,7 +41,21 @@ pub fn App() -> Html {
                             flex-direction: column;
                         }
                     "#)}>
-                        <components::letterboxd::Card />
+                        <components::github::Card />
+                        <components::lastfm::Card />
+                    </div>
+                    <div class={css!(r#"
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        flex-direction: row;
+                        gap: 150px;
+
+                        @media screen and (max-width: 1500px) {
+                            flex-direction: column;
+                        }
+                    "#)}>
+                        <components::goodreads::Card />
                         <components::letterboxd::Card />
                     </div>
                 </div>

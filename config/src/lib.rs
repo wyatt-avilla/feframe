@@ -2,12 +2,12 @@ use dotenv_codegen::dotenv;
 
 pub const ENV: Env = Env {
     username: Username {
-        github: dotenv!("GH_USERNAME"),
-        lastfm: dotenv!("LASTFM_USERNAME"),
-        letterboxd: dotenv!("LETTERBOXD_USERNAME"),
+        github: "wyatt-avilla",
+        lastfm: "wowitswyatt",
+        letterboxd: "wowitswyatt",
     },
     link: Link {
-        goodreads: dotenv!("GOODREADS_SHELF"),
+        goodreads: "https://www.goodreads.com/review/list/159014522?shelf=read",
     },
     key: Key {
         lastfm: dotenv!("LASTFM_KEY"),

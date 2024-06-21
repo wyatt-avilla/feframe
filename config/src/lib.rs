@@ -15,7 +15,7 @@ pub const ENV: Env = Env {
 };
 
 pub const ENDPOINT: Endpoint = Endpoint {
-    base: "127.0.0.1:8080",
+    base: dotenv!("URL_BASE"),
     github: "/api/github",
     lastfm: "/api/lastfm",
     letterboxd: "/api/letterboxd",

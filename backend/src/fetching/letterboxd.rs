@@ -2,20 +2,7 @@ use cached::proc_macro::once;
 use scraper::{Html, Selector};
 use types::Movie;
 
-async fn fetch_image(slug: &str) -> Result<String, Box<dyn std::error::Error>> {
-    let width = 70;
-    let height = 105;
-    let url = format!("https://letterboxd.com/ajax/poster/film/{slug}/std/{width}x{height}/");
-
-    let html = Html::parse_document(
-        &reqwest::get(&url)
-            .await
-            .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?
-            .text()
-            .await
-            .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?,
-    );
-
+fn parse_image(html: &Html) -> Result<String, Box<dyn std::error::Error>> {
     let img_selector =
         Selector::parse("div.react-component.poster.film-poster img.image[src]").unwrap();
 
@@ -24,6 +11,18 @@ async fn fetch_image(slug: &str) -> Result<String, Box<dyn std::error::Error>> {
         .next()
         .ok_or("Image source not found in HTML")?
         .attr("src")
+        .ok_or("Image source attribute not found in HTML")?
+        .to_string())
+}
+
+fn parse_release_year(html: &Html) -> Result<String, Box<dyn std::error::Error>> {
+    let img_selector = Selector::parse("div.react-component.poster.film-poster").unwrap();
+
+    Ok(html
+        .select(&img_selector)
+        .next()
+        .ok_or("Image source not found in HTML")?
+        .attr("data-film-release-year")
         .ok_or("Image source attribute not found in HTML")?
         .to_string())
 }
@@ -73,14 +72,12 @@ pub async fn fetch_newest(
 
             let slug = div_val.attr("data-film-slug")?;
 
-            let year = div_val.attr("data-film-release-year")?;
-
             Some(Movie {
                 title,
                 rating,
-                release_year: year.to_string(),
+                release_year: String::new(),
                 url: format! {"https://letterboxd.com{link}"},
-                poster_url: slug.to_string(),
+                poster_url: slug.to_string(), // icky, just store the slug in here for now xd
             })
         })
         .take(n as usize);
@@ -88,8 +85,21 @@ pub async fn fetch_newest(
     // no async closures :(
     let mut movies = Vec::new();
     for mut movie in movie_iter {
-        let slug = movie.poster_url.clone();
-        movie.poster_url = fetch_image(&slug).await?;
+        let html = Html::parse_document(
+            &reqwest::get(format!(
+                "https://letterboxd.com/ajax/poster/film/{}/std/70x105/",
+                movie.poster_url // aka slug
+            ))
+            .await
+            .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?
+            .text()
+            .await
+            .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?,
+        );
+
+        movie.poster_url = parse_image(&html)?;
+        movie.release_year = parse_release_year(&html)?;
+
         movies.push(movie);
     }
 

@@ -12,7 +12,7 @@ pub fn App() -> Html {
                     html, body {
                         font-family: sans-serif;
 
-                        padding: 0;
+                        padding: 50px;
                         margin: 0;
 
                         display: flex;
@@ -21,21 +21,33 @@ pub fn App() -> Html {
                         min-height: 100vh;
                         flex-direction: column;
 
-                        background-color: rgb(237, 244, 255);
+                        background-color: #a09cac;
                     }
                 "#)} />
                 <div class={css!(r#"
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    gap: 50px;
+                    gap: 100px;
                 "#)}>
                     <div class={css!(r#"
                         display: flex;
                         justify-content: center;
                         align-items: center;
                         flex-direction: row;
-                        gap: 150px;
+
+                        @media screen and (max-width: 1500px) {
+                            flex-direction: column;
+                        }
+                    "#)}>
+                        <components::profile::Card />
+                    </div>
+                    <div class={css!(r#"
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        flex-direction: row;
+                        gap: 100px;
 
                         @media screen and (max-width: 1500px) {
                             flex-direction: column;
@@ -49,7 +61,7 @@ pub fn App() -> Html {
                         justify-content: center;
                         align-items: center;
                         flex-direction: row;
-                        gap: 150px;
+                        gap: 100px;
 
                         @media screen and (max-width: 1500px) {
                             flex-direction: column;

@@ -1,0 +1,21 @@
+[package]
+name = "backend"
+version = "0.1.0"
+edition = "2021"
+build = "build.rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+types = { path = "../types" }
+config = { path = "../config" }
+actix-files = "0.6.6"
+actix-web = "4.8.0"
+cached = { version = "0.51.4", features = ["async"] }
+rand = "0.8.5"
+regex = "1.10.5"
+reqwest = "0.12.5"
+scraper = "0.19.0"
+serde_json = "1.0.117"
+url = "2.5.2"
+yew = "0.21.0"

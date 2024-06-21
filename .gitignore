@@ -19,3 +19,7 @@ Cargo.lock
 
 # env file containing API keys
 .env
+
+# wasm related
+/frontend/dist/
+/frontend/index.html

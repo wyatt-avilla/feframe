@@ -29,7 +29,7 @@ async fn fetch_image(slug: &str) -> Result<String, Box<dyn std::error::Error>> {
 }
 
 // 1 day
-#[once(result = true, time = 86400)]
+#[once(result = true, time = 86400, sync_writes = true)]
 pub async fn fetch_newest(
     username: &str,
     n: u32,

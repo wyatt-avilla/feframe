@@ -2,7 +2,7 @@ use cached::proc_macro::once;
 use types::Song;
 
 // 20 min
-#[once(result = true, time = 1200)]
+#[once(result = true, time = 1200, sync_writes = true)]
 pub async fn fetch_newest(
     username: &str,
     key: &str,

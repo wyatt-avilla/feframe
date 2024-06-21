@@ -20,7 +20,7 @@ fn swap_name_order(full_name: &str) -> Result<String, String> {
 }
 
 // 1 day
-#[once(result = true, time = 86400)]
+#[once(result = true, time = 86400, sync_writes = true)]
 pub async fn fetch_newest(
     shelf: &str,
     n: u32,

@@ -3,7 +3,7 @@ use reqwest::{self, header};
 use types::Commit;
 
 // 15 min
-#[once(result = true, time = 900)]
+#[once(result = true, time = 900, sync_writes = true)]
 pub async fn fetch_newest(
     username: &str,
     n: u32,

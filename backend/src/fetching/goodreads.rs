@@ -25,7 +25,7 @@ pub async fn fetch_newest(
     shelf: &str,
     n: u32,
 ) -> Result<std::vec::Vec<Book>, Box<dyn std::error::Error>> {
-    println!("Parsing goodreads shelf html...");
+    log::info!("Parsing goodreads shelf html...");
     let html = Html::parse_document(
         &reqwest::get(shelf)
             .await

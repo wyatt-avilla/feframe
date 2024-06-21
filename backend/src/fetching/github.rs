@@ -8,7 +8,7 @@ pub async fn fetch_newest(
     username: &str,
     n: u32,
 ) -> Result<std::vec::Vec<Commit>, Box<dyn std::error::Error>> {
-    println!("Fetching data from github api...");
+    log::info!("Fetching data from github api...");
     let url = format!("https://api.github.com/users/{username}/events");
 
     let client = reqwest::Client::new();

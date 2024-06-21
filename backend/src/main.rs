@@ -1,5 +1,9 @@
 use actix_web::{web, App, HttpServer, Responder};
+use chrono::Local;
 use config::{ENDPOINT, ENV};
+use env_logger::Builder;
+use log::LevelFilter;
+use std::io::Write;
 
 mod fetching;
 
@@ -37,7 +41,21 @@ async fn letterboxd() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    println!("Server opened on {}", ENDPOINT.base);
+    Builder::new()
+        .format(|buf, record| {
+            writeln!(
+                buf,
+                "{} [{}] - {}",
+                Local::now().format("%Y-%m-%dT%H:%M:%S"),
+                record.level(),
+                record.args()
+            )
+        })
+        .filter(None, LevelFilter::Info)
+        .init();
+
+    log::info!("Server opened on {}", ENDPOINT.base);
+
     HttpServer::new(|| {
         App::new()
             .route(ENDPOINT.github, web::get().to(github))

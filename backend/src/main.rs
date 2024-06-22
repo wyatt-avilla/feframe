@@ -52,6 +52,8 @@ async fn main() -> ShuttleActixWeb<impl FnOnce(&mut ServiceConfig) + Send + Clon
     let config = move |cfg: &mut ServiceConfig| {
         let cors = Cors::default()
             .allowed_origin(ENDPOINT.base)
+            .allowed_origin("https://wyatt.wtf") // required by cloudflare worker
+            .allowed_origin("https://www.wyatt.wtf")
             .allowed_methods(vec!["GET", "POST"])
             .allowed_headers(vec![http::header::CONTENT_TYPE])
             .max_age(3600);

@@ -18,9 +18,16 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build Backend
-      run: touch .env && cargo build --verbose
+      run: |
+        cd backend
+        touch .env
+        cargo build --verbose
     - name: Build Frontend
-      run: cargo install trunk && cd frontend && trunk build --release
+      run: |
+        cd frontend
+        cargo install trunk wasm-bindgen-cli
+        rustup target add wasm32-unknown-unknown
+        trunk build --release
     - name: Run tests
       run: cargo test --verbose
     - name: Run Clippy

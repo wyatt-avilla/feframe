@@ -17,20 +17,28 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Prep .env
+      run: |
+        echo "LASTFM_KEY=${{secrets.LASTFM_KEY}}" >> .env
+
     - name: Build Backend
       run: |
         cd backend
-        touch .env
         cargo build --verbose
+
     - name: Build Frontend
       run: |
         cd frontend
         cargo install trunk wasm-bindgen-cli
         rustup target add wasm32-unknown-unknown
         trunk build --release
+
     - name: Run tests
       run: cargo test --verbose
+
     - name: Run Clippy
       run: cargo clippy --all-targets --all-features -- -D warnings -W clippy::pedantic
+
     - name: Check formatting
       run: cargo fmt -- --check

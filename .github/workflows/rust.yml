@@ -17,8 +17,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build
+    - name: Build Backend
       run: touch .env && cargo build --verbose
+    - name: Build Frontend
+      run: cargo install trunk && cd frontend && trunk build --release
     - name: Run tests
       run: cargo test --verbose
     - name: Run Clippy

@@ -8,6 +8,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  LASTFM_KEY: ${{secrets.LASTFM_KEY}}
 
 jobs:
   build:
@@ -17,8 +18,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build
-      env:
-        LASTFM_KEY: ${{secrets.LASTFM_KEY}}
       run: touch .env && cargo build --verbose
     - name: Run tests
       run: cargo test --verbose

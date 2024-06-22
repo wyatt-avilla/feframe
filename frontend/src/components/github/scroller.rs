@@ -14,7 +14,7 @@ pub fn Scroller() -> Html {
         use_effect_with((), move |()| {
             let commits = commits.clone();
             wasm_bindgen_futures::spawn_local(async move {
-                let response = reqwest::get(format!("http://{}{}", ENDPOINT.base, ENDPOINT.github))
+                let response = reqwest::get(format!("{}{}", ENDPOINT.base, ENDPOINT.github))
                     .await
                     .unwrap();
                 let fetched_commits: Vec<Commit> = response.json().await.unwrap();

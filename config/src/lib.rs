@@ -15,7 +15,7 @@ pub const ENV: Env = Env {
 };
 
 pub const ENDPOINT: Endpoint = Endpoint {
-    base: dotenv!("URL_BASE"),
+    base: "https://feframe.shuttleapp.rs",
     github: "/api/github",
     lastfm: "/api/lastfm",
     letterboxd: "/api/letterboxd",

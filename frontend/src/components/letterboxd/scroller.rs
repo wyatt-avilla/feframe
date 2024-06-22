@@ -13,10 +13,9 @@ pub fn Scroller() -> Html {
         use_effect_with((), move |()| {
             let movies = movies.clone();
             wasm_bindgen_futures::spawn_local(async move {
-                let response =
-                    reqwest::get(format!("http://{}{}", ENDPOINT.base, ENDPOINT.letterboxd))
-                        .await
-                        .unwrap();
+                let response = reqwest::get(format!("{}{}", ENDPOINT.base, ENDPOINT.letterboxd))
+                    .await
+                    .unwrap();
                 let fetched_movies: Vec<Movie> = response.json().await.unwrap();
                 movies.set(fetched_movies);
             });

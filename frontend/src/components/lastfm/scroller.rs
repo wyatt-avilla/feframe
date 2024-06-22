@@ -13,7 +13,7 @@ pub fn Scroller() -> Html {
         use_effect_with((), move |()| {
             let songs = songs.clone();
             wasm_bindgen_futures::spawn_local(async move {
-                let response = reqwest::get(format!("http://{}{}", ENDPOINT.base, ENDPOINT.lastfm))
+                let response = reqwest::get(format!("{}{}", ENDPOINT.base, ENDPOINT.lastfm))
                     .await
                     .unwrap();
                 let fetched_songs: Vec<Song> = response.json().await.unwrap();

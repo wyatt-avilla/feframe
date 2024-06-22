@@ -1,4 +1,6 @@
-workspace = { members = ["backend", "config", "frontend", "types"] }
+[workspace]
+members = ["backend", "config", "frontend", "types"]
+default-members = ["backend"]
 
 [package]
 name = "feframe"

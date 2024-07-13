@@ -10,9 +10,15 @@ _/fɛfɹeɪm/_
 - [x] GitHub
 - [x] Goodreads
 - [x] Letterboxd
-- [x] Caching
+  - [ ] separate requests
+- [x] caching
 
 ### Frontend
 
-- [x] Components
-- [x] Styling
+- [x] components
+- [x] styling
+  - [ ] refactor
+
+### Misc
+
+- [ ] deploy via actions

@@ -26,7 +26,7 @@ pub const SOCIAL: SocialLinks = SocialLinks {
     github: "https://github.com/wyatt-avilla",
     lastfm: "https://www.last.fm/user/wowitswyatt",
     letterboxd: "https://letterboxd.com/wowitswyatt/",
-    goodreads: "https://www.goodreads.com/user/show/159014522-wowitswyatt",
+    goodreads: "https://www.goodreads.com/user/show/159014522-wyatt",
 };
 
 pub struct SocialLinks<'a> {

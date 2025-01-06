@@ -1,4 +1,5 @@
 use cached::proc_macro::once;
+use regex::Regex;
 use scraper::{Html, Selector};
 use types::Movie;
 
@@ -16,15 +17,22 @@ fn parse_image(html: &Html) -> Result<String, Box<dyn std::error::Error>> {
 }
 
 fn parse_release_year(html: &Html) -> Result<String, Box<dyn std::error::Error>> {
-    let img_selector = Selector::parse("div.react-component.poster.film-poster").unwrap();
+    let frame_selector = Selector::parse("span.frame[title]").unwrap();
 
-    Ok(html
-        .select(&img_selector)
+    let date_re = Regex::new(r"\((\d{4})\)").unwrap();
+
+    let title = html
+        .select(&frame_selector)
         .next()
-        .ok_or("Image source not found in HTML")?
-        .attr("data-film-release-year")
-        .ok_or("Image source attribute not found in HTML")?
-        .to_string())
+        .ok_or("Frame not found in HTML")?
+        .attr("title")
+        .ok_or("Title not found in frame HTML")?;
+
+    Ok(date_re
+        .captures(title)
+        .and_then(|caps| caps.get(1))
+        .map(|year| year.as_str().to_owned())
+        .ok_or("Couldn't parse date")?)
 }
 
 // 1 day

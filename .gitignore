@@ -22,3 +22,5 @@ Cargo.lock
 
 # wasm related
 /frontend/dist/
+.shuttle*
+Secrets*.toml

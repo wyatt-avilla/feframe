@@ -1,4 +1,9 @@
-assets = [
+[deploy]
+include = [
     ".env",
-    "frontend/dist/*"
+]
+
+[build]
+assets = [
+    "frontend/dist/*",
 ]

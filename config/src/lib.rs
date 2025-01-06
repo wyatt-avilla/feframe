@@ -15,7 +15,7 @@ pub const ENV: Env = Env {
 };
 
 pub const ENDPOINT: Endpoint = Endpoint {
-    base: "https://feframe.shuttleapp.rs",
+    base: "https://feframe-wa5w.shuttle.app",
     github: "/api/github",
     lastfm: "/api/lastfm",
     letterboxd: "/api/letterboxd",

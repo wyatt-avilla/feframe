@@ -28,6 +28,7 @@
 
         rustToolchain = pkgs.rust-bin.stable.latest.default.override {
           targets = [ "wasm32-unknown-unknown" ];
+          extensions = [ "clippy" ];
         };
 
         nativeBuildInputs = with pkgs; [
@@ -44,8 +45,10 @@
       {
         devShells.default = pkgs.mkShell {
           inherit nativeBuildInputs buildInputs;
+          packages = with pkgs; [ pre-commit ];
 
           shellHook = ''
+            pre-commit install
             export FLAKE_ROOT="$PWD"
 
             build() {

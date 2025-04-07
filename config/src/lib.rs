@@ -15,6 +15,9 @@ pub const ENV: Env = Env {
 };
 
 pub const ENDPOINT: Endpoint = Endpoint {
+    #[cfg(feature = "local")]
+    base: "http://127.0.0.1:8000",
+    #[cfg(not(feature = "local"))]
     base: "https://feframe-wa5w.shuttle.app",
     github: "/api/github",
     lastfm: "/api/lastfm",

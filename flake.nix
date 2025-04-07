@@ -42,7 +42,21 @@
         buildInputs = with pkgs; [ openssl ];
       in
       {
-        devShells.default = pkgs.mkShell { inherit nativeBuildInputs buildInputs; };
+        devShells.default = pkgs.mkShell {
+          inherit nativeBuildInputs buildInputs;
+
+          shellHook = ''
+            export FLAKE_ROOT="$PWD"
+
+            build() {
+              cd "$FLAKE_ROOT/frontend"
+              trunk build --release --features local
+              cd "$FLAKE_ROOT"
+              cargo build --features local
+            }
+            export -f build
+          '';
+        };
       }
     );
 }

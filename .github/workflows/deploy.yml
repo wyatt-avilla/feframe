@@ -10,19 +10,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Install cargo-binstall
-        uses: cargo-bins/cargo-binstall@main
-
-      - name: Install Shuttle
-        run: cargo binstall -y --locked cargo-shuttle
-
       - name: Prep .env
         run: |
-          echo "LASTFM_KEY=${{ secrets.LASTFM_KEY }}" >> .env
+          echo "LASTFM_KEY=${{secrets.LASTFM_KEY}}" >> .env
 
-      - name: Deploy
-        run: shuttle deploy --id proj_01JGWTSA08EF54V8GT8HH5DDXE
-        env:
-          SHUTTLE_API_KEY: ${{ secrets.SHUTTLE_API_KEY }}
+      - uses: shuttle-hq/deploy-action@v2
+        with:
+          shuttle-api-key: ${{ secrets.SHUTTLE_API_KEY }}
+          project-id: proj_01JGWTSA08EF54V8GT8HH5DDXE

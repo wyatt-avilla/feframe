@@ -10,9 +10,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Prep .env
         run: |
-          echo "LASTFM_KEY=${{secrets.LASTFM_KEY}}" >> .env
+          echo "LASTFM_KEY=${{ secrets.LASTFM_KEY }}" >> .env
 
       - uses: shuttle-hq/deploy-action@v2
         with:

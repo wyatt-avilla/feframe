@@ -14,11 +14,14 @@ jobs:
 
       - name: Prep .env
         run: |
-          echo "LASTFM_KEY=${{secrets.LASTFM_KEY}}" >> .env
+          echo "LASTFM_KEY=${{ secrets.LASTFM_KEY }}" >> .env
 
-      - uses: shuttle-hq/deploy-action@v2
-        with:
-          shuttle-api-key: ${{ secrets.SHUTTLE_API_KEY }}
-          project-id: proj_01JGWTSA08EF54V8GT8HH5DDXE
-          secrets: |
-            LASTFM_KEY = '${{ secrets.LASTFM_KEY }}'
+      - name: Install Shuttle
+      - uses: cargo-bins/cargo-binstall@main
+        run: |
+          cargo binstall -y --locked cargo-shuttle
+
+      - name: Deploy
+        run: shuttle deploy --id proj_01JGWTSA08EF54V8GT8HH5DDXE
+        env:
+          SHUTTLE_API_KEY: ${{ secrets.SHUTTLE_API_KEY }}

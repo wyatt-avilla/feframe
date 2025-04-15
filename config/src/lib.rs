@@ -3,8 +3,8 @@ use dotenv_codegen::dotenv;
 pub const ENV: Env = Env {
     username: Username {
         github: "wyatt-avilla",
-        lastfm: "wowitswyatt",
-        letterboxd: "wowitswyatt",
+        lastfm: "wyattwtf",
+        letterboxd: "wyattwtf",
     },
     link: Link {
         goodreads: "https://www.goodreads.com/review/list/159014522?shelf=read",

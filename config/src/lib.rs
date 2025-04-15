@@ -27,8 +27,8 @@ pub const ENDPOINT: Endpoint = Endpoint {
 
 pub const SOCIAL: SocialLinks = SocialLinks {
     github: "https://github.com/wyatt-avilla",
-    lastfm: "https://www.last.fm/user/wowitswyatt",
-    letterboxd: "https://letterboxd.com/wowitswyatt/",
+    lastfm: "https://www.last.fm/user/wyattwtf",
+    letterboxd: "https://letterboxd.com/wyattwtf/",
     goodreads: "https://www.goodreads.com/user/show/159014522-wyatt",
 };
 

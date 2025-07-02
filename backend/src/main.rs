@@ -1,9 +1,8 @@
 use actix_cors::Cors;
 use actix_files::Files;
 use actix_web::{
-    get, http,
+    Responder, get, http,
     web::{self, ServiceConfig},
-    Responder,
 };
 use config::{ENDPOINT, ENV};
 use shuttle_actix_web::ShuttleActixWeb;

@@ -1,6 +1,6 @@
 mod components;
 
-use stylist::yew::{styled_component, Global};
+use stylist::yew::{Global, styled_component};
 use yew::prelude::*;
 
 #[styled_component]

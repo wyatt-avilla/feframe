@@ -7,8 +7,7 @@ pub const ENV: Env = Env {
         letterboxd: "wyattwtf",
     },
     link: Link {
-        goodreads:
-            "https://www.goodreads.com/review/list/159014522?order=d&shelf=read&sort=date_read",
+        goodreads: "https://www.goodreads.com/review/list/159014522?order=d&shelf=read&sort=date_read",
     },
     key: Key {
         lastfm: dotenv!("LASTFM_KEY"),

@@ -9,7 +9,9 @@ pub async fn fetch_newest(
     n: u32,
 ) -> Result<std::vec::Vec<Song>, Box<dyn std::error::Error>> {
     log::info!("Fetching data from lastfm api...");
-    let url = format!("https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={username}&api_key={key}&format=json");
+    let url = format!(
+        "https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={username}&api_key={key}&format=json"
+    );
 
     let response = reqwest::get(&url)
         .await

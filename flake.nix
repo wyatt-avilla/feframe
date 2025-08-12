@@ -40,11 +40,25 @@
         ];
 
         buildInputs = with pkgs; [ openssl ];
+
+        localBuildScript = pkgs.writeShellScriptBin "build" ''
+          set -euo pipefail
+          export FLAKE_ROOT="''${FLAKE_ROOT:-$PWD}"
+
+          cd "$FLAKE_ROOT/frontend"
+          trunk build --release --features local
+
+          cd "$FLAKE_ROOT"
+          cargo build --features local
+        '';
       in
       {
         devShells.default = pkgs.mkShell {
           inherit nativeBuildInputs buildInputs;
-          packages = with pkgs; [ pre-commit ];
+          packages = with pkgs; [
+            pre-commit
+            localBuildScript
+          ];
 
           shellHook = ''
             pre-commit install

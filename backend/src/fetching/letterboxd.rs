@@ -1,6 +1,54 @@
 use cached::proc_macro::once;
+use futures::future;
 use scraper::{Html, Selector};
 use types::Movie;
+
+async fn poster_url_from_slug(slug: &str) -> Result<String, Box<dyn std::error::Error>> {
+    Ok(reqwest::get(format!(
+        "https://letterboxd.com/film/{slug}/poster/std/150/"
+    ))
+    .await
+    .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?
+    .json::<serde_json::Value>()
+    .await
+    .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?
+    .get("url")
+    .and_then(|v| v.as_str())
+    .ok_or("Missing poster url")?
+    .to_string()
+    .trim_matches('"')
+    .to_string())
+}
+
+async fn build_movie(slug: &str, rating: String) -> Result<Movie, Box<dyn std::error::Error>> {
+    let poster_url_future = poster_url_from_slug(slug);
+
+    let url = format!("https://letterboxd.com/film/{slug}");
+
+    let json = reqwest::get(format!("{url}/json/"))
+        .await?
+        .json::<serde_json::Value>()
+        .await?;
+
+    let title = json
+        .get("name")
+        .and_then(|v| v.as_str())
+        .ok_or("Missing title")?
+        .to_string();
+
+    let release_year = json
+        .get("releaseYear")
+        .ok_or("Missing release year")?
+        .to_string();
+
+    Ok(Movie {
+        title,
+        rating,
+        release_year,
+        url,
+        poster_url: poster_url_future.await?,
+    })
+}
 
 // 1 day
 #[once(result = true, time = 86400, sync_writes = true)]
@@ -25,12 +73,11 @@ pub async fn fetch_newest(
     let griditem_sel = Selector::parse("li.griditem").unwrap();
 
     let react_sel = Selector::parse("div.react-component").unwrap();
-    let img_sel = Selector::parse("img.image").unwrap();
     let rating_sel = Selector::parse("p.poster-viewingdata span.rating").unwrap();
 
-    let base = html.select(&container_sel).next();
-
-    let movie_iter = base
+    let movie_futures = html
+        .select(&container_sel)
+        .next()
         .into_iter()
         .flat_map(move |container| {
             let griditem_sel = &griditem_sel.clone();
@@ -40,8 +87,6 @@ pub async fn fetch_newest(
                 .collect::<Vec<_>>()
         })
         .filter_map(move |li| {
-            let title = li.select(&img_sel).next()?.value().attr("alt")?.to_string();
-
             let rating = li
                 .select(&rating_sel)
                 .next()
@@ -51,56 +96,15 @@ pub async fn fetch_newest(
             let rc = li.select(&react_sel).next()?;
             let attrs = rc.value();
 
-            let link = attrs.attr("data-target-link")?;
             let slug = attrs
                 .attr("data-item-slug")
                 .or_else(|| attrs.attr("data-film-slug"))?;
 
-            Some(Movie {
-                title,
-                rating,
-                release_year: String::new(),
-                url: format!("https://letterboxd.com{link}"),
-                poster_url: slug.to_string(),
-            })
+            Some((slug, rating))
         })
-        .take(n as usize);
+        .take(n as usize)
+        .map(|(slug, rating)| build_movie(slug, rating))
+        .collect::<Vec<_>>();
 
-    // no async closures :(
-    let mut movies = Vec::new();
-    for mut movie in movie_iter {
-        let slug = movie.poster_url;
-
-        let poster_json = &reqwest::get(format!(
-            "https://letterboxd.com/film/{slug}/poster/std/150/"
-        ))
-        .await
-        .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?
-        .json::<serde_json::Value>()
-        .await
-        .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?;
-
-        let movie_json = &reqwest::get(format!("https://letterboxd.com/film/{slug}/json/"))
-            .await
-            .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?
-            .json::<serde_json::Value>()
-            .await
-            .map_err(|err| Box::new(err) as Box<dyn std::error::Error>)?;
-
-        movie.poster_url = poster_json
-            .get("url")
-            .ok_or("Missing poster url")?
-            .to_string()
-            .trim_matches('"')
-            .to_string();
-
-        movie.release_year = movie_json
-            .get("releaseYear")
-            .ok_or("Missing release year")?
-            .to_string();
-
-        movies.push(movie);
-    }
-
-    Ok(movies)
+    future::try_join_all(movie_futures).await
 }
